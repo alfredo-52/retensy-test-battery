@@ -1,441 +1,601 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}body{margin:0;font:14px system-ui,-apple-system,Segoe UI,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Тест-батарея Retensy</title>
 <style>
-/* layout: single column, sticky filter bar, task cards + rubric + tracker */
 :root{
   --bg:#f4f5f3; --surface:#ffffff; --surface2:#eef0ec; --fg:#191c19; --muted:#5b625b;
-  --line:#d9ddd6; --accent:#0f766e; --accent-soft:#d5efe9; --amber:#b45309; --red:#b91c1c; --green:#15803d;
+  --line:#d9ddd6; --accent:#0f766e; --accent-soft:#d5efe9; --amber:#b45309; --red:#b91c1c; --green:#15803d; --blue:#1d4ed8;
   --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
   --sans:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0e1110; --surface:#161a18; --surface2:#1d2220; --fg:#e7eae7; --muted:#99a299;
-  --line:#2a302d; --accent:#2dd4bf; --accent-soft:#113b36; --amber:#f59e0b; --red:#f87171; --green:#4ade80;
+  --line:#2a302d; --accent:#2dd4bf; --accent-soft:#113b36; --amber:#f59e0b; --red:#f87171; --green:#4ade80; --blue:#60a5fa;
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --bg:#0e1110; --surface:#161a18; --surface2:#1d2220; --fg:#e7eae7; --muted:#99a299;
-  --line:#2a302d; --accent:#2dd4bf; --accent-soft:#113b36; --amber:#f59e0b; --red:#f87171; --green:#4ade80;
+  --line:#2a302d; --accent:#2dd4bf; --accent-soft:#113b36; --amber:#f59e0b; --red:#f87171; --green:#4ade80; --blue:#60a5fa;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.5}
-.wrap{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:32px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.5}
+img{max-width:100%}[hidden]{display:none!important}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:28px}
 h1{font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.1;margin:0 0 6px;text-wrap:balance;letter-spacing:-.02em}
-h2{font-size:1.3rem;margin:40px 0 14px;letter-spacing:-.01em;border-top:1px solid var(--line);padding-top:24px}
-.lede{color:var(--muted);max-width:66ch;margin:0 0 4px}
-.meta{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:14px}
-.filters{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;gap:6px;padding-block:12px;margin-top:8px;border-bottom:1px solid var(--line)}
+h2{font-size:1.3rem;margin:38px 0 12px;letter-spacing:-.01em;border-top:1px solid var(--line);padding-top:22px}
+.lede{color:var(--muted);max-width:70ch;margin:0 0 6px}
+.meta{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:12px;line-height:1.6}
+.counts{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.pill{font-family:var(--mono);font-size:.72rem;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+.pill b{color:var(--accent)}
+.filters{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;gap:6px;padding-block:12px;margin-top:10px;border-bottom:1px solid var(--line)}
 .filters button{font-family:var(--mono);font-size:.72rem;padding:5px 10px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;cursor:pointer}
 .filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
-:root[data-theme="dark"] .filters button[aria-pressed="true"],
-:root:not([data-theme="light"]) .filters button[aria-pressed="true"]{color:#06201c}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .filters button[aria-pressed="true"]{color:#06201c}}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:14px}
 .card-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;justify-content:space-between}
-.tid{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:600}
-.ctitle{font-size:1.1rem;font-weight:600;margin:2px 0;flex:1 1 60%;min-width:0}
+.tid{font-family:var(--mono);font-size:.78rem;color:var(--accent);font-weight:600}
+.ctitle{font-size:1.08rem;font-weight:600;margin:2px 0;flex:1 1 55%;min-width:0}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-family:var(--mono);font-size:.66rem;padding:3px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
-.chip.real{color:var(--green);border-color:var(--green)}
-.chip.partial{color:var(--amber);border-color:var(--amber)}
-.chip.synthetic{color:var(--muted)}
-.chip.simple{background:var(--accent-soft);color:var(--accent);border:none}
-.chip.medium{background:transparent;color:var(--amber);border-color:var(--amber)}
-.chip.hard{background:transparent;color:var(--red);border-color:var(--red)}
-.src{font-size:.82rem;margin:8px 0 14px}
+.chip.A{background:var(--accent-soft);color:var(--accent);border:none;font-weight:600}
+.chip.B{color:var(--blue);border-color:var(--blue)}
+.chip.C{color:var(--amber);border-color:var(--amber)}
+.chip.simple{color:var(--green);border-color:var(--green)}
+.chip.medium{color:var(--amber);border-color:var(--amber)}
+.chip.hard{color:var(--red);border-color:var(--red)}
+.chip.plat{color:var(--muted)}
+.src{font-size:.8rem;margin:8px 0 10px}
 .src a{color:var(--accent);word-break:break-all}
-.block{margin-top:12px}
-.block h4{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 5px}
+.dates{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-bottom:8px}
+.quote{border-left:3px solid var(--accent);background:var(--surface2);padding:8px 12px;border-radius:0 8px 8px 0;font-size:.86rem;margin:8px 0}
+.quote .lbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-bottom:3px}
+.block{margin-top:11px}
+.block h4{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 5px}
 .block p{margin:0}
 .block ul{margin:0;padding-left:18px}
 .block li{margin:2px 0}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:560px){.grid2{grid-template-columns:1fr}}
 .neg{border-left:3px solid var(--red);padding-left:12px}
-code,.mono{font-family:var(--mono);font-size:.85em}
+.added{border-left:3px solid var(--amber);padding-left:12px}
 .testdata{background:var(--surface2);border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:.78rem;white-space:pre-wrap;overflow-x:auto;min-width:0}
 table{width:100%;border-collapse:collapse;font-size:.85rem}
 .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-top:12px}
 th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
 th{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);white-space:nowrap}
 .rubric td:last-child{font-family:var(--mono);font-weight:600;color:var(--accent);text-align:right}
-td[contenteditable]{min-width:90px}
 td[contenteditable]:focus{outline:2px solid var(--accent);outline-offset:-2px;background:var(--surface2)}
 .addrow{font-family:var(--mono);font-size:.74rem;margin-top:10px;padding:7px 12px;border:1px dashed var(--line);background:transparent;color:var(--accent);border-radius:8px;cursor:pointer}
 .toggle{position:fixed;top:env(safe-area-inset-top,8px);right:10px;z-index:9;font-family:var(--mono);font-size:.68rem;padding:5px 9px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;cursor:pointer}
-.foot{color:var(--muted);font-size:.8rem;margin-top:16px}
-a.lnk{color:var(--accent)}
+.foot{color:var(--muted);font-size:.8rem;margin-top:16px;line-height:1.6}
+.excl li{margin:4px 0}
 </style>
 </head>
 <body>
 <button class="toggle" id="themeBtn" type="button">тема</button>
 <div class="wrap">
-  <h1>Тест-батарея: боты и автоматизация</h1>
-  <p class="lede">20 тестовых заданий на реальных запросах заказчиков из открытых сообществ (Telegram: getcourse_online, chatWH, zerocoders, n8n_community, bitrix24help, albato_helpers, getinfobiz; биржа Kwork). Для проверки скорости и качества команды Retensy.</p>
-  <p class="meta" id="asof">выборка 245 запросов (радар tools/chat_radar.py + kwork) · задачи сверены с частотностью архетипов · источники-объявления исполнителей и ручная работа убраны после адверсариальной проверки · это качественная выборка, не рейтинг рынка</p>
-  <p class="lede" style="font-size:.9rem">Топ архетипов спроса (buyer-запросы, 121 в scope): Telegram-бот 30 · CRM/воронки 29 · интеграции API/вебхуки 25 · AI-агент 22 · оплаты/подписки 21 · парсер/мониторинг 16 · no-code 11 · рассылки 6 · MAX-бот 6 · Sheets/Excel 5 · запись 4.</p>
+  <h1>Тест-батарея Retensy</h1>
+  <p class="lede">35 реальных запросов заказчиков на боты, интеграции и автоматизацию — для практического тестирования команды. Каждый открыт и подтверждён по первоисточнику, со статусом доказательства A–E, точной выдержкой и датами.</p>
+
+  <div class="counts" id="counts"></div>
+
+  <p class="meta">Статусы: <b>A</b> — заказ / ищет исполнителя · <b>B</b> — явно хочет реализовать (оплата не подтв.) · <b>C</b> — техзапрос, заказ не подтв. В счётчик «подтверждённых» идут только A и B. Во всех ТЗ: функциональные требования сверх явно указанного, тест-данные, критерии приёмки, негативные сценарии и оценки — <b>добавлены нами</b> для воспроизводимого теста; дословный запрос заказчика — в блоке «Оригинал».</p>
 
   <div class="filters" id="filters">
-    <button data-f="all" aria-pressed="true">все 20</button>
-    <button data-f="real">реальные источники</button>
-    <button data-f="simple">простые</button>
-    <button data-f="medium">средние</button>
-    <button data-f="hard">сложные</button>
-    <button data-f="first5">стартовые 5</button>
+    <button data-f="all" aria-pressed="true">все 35</button>
+    <button data-f="A">A — заказы</button>
+    <button data-f="B">B</button>
+    <button data-f="C">C</button>
+    <button data-f="Telegram">Telegram</button>
+    <button data-f="Kwork">Kwork</button>
+    <button data-f="FL.ru">FL.ru</button>
+    <button data-f="weblancer.net">weblancer</button>
+    <button data-f="freelance.ru">freelance.ru</button>
+    <button data-f="top5">топ-5</button>
   </div>
 
   <div id="tasks"></div>
 
+  <h2>Масштаб исследования (реальные числа)</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Площадка</th><th>Как собрано</th><th>Просмотрено</th><th>Взято A/B</th><th>Доступ</th></tr></thead>
+    <tbody id="scope"></tbody>
+  </table></div>
+  <p class="meta" id="scopeNote"></p>
+
   <h2>Система оценки — 100 баллов</h2>
-  <p class="lede">Единая шкала на каждое решение. В скобках — как проверять, чтобы оценка не была субъективной.</p>
+  <p class="lede">Шкала под приоритизацию тестов Retensy. В скобках — как проверять.</p>
   <div class="tblwrap"><table class="rubric">
     <thead><tr><th>Критерий</th><th>Как проверять</th><th>Балл</th></tr></thead>
     <tbody id="rubric"></tbody>
   </table></div>
 
-  <h2>Таблица учёта результатов</h2>
-  <p class="lede">Ячейки редактируются прямо в странице, сохраняются в этом браузере. Для общего учёта — выгрузить и перенести в репозиторий/таблицу.</p>
+  <h2>Таблица учёта результатов команды</h2>
+  <p class="lede">Ячейки редактируются, сохраняются в этом браузере. Для общего учёта — перенести в репозиторий/таблицу.</p>
   <div class="tblwrap"><table>
-    <thead><tr>
-      <th>ID</th><th>Исполнитель</th><th>Время</th><th>Результат</th><th>Ошибок</th><th>Баллы</th><th>Что не получилось</th><th>Переиспользование</th>
-    </tr></thead>
+    <thead><tr><th>ID</th><th>Исполнитель</th><th>Время</th><th>Результат</th><th>Ошибок</th><th>Баллы</th><th>Что не получилось</th><th>Переиспользование</th></tr></thead>
     <tbody id="tracker"></tbody>
   </table></div>
   <button class="addrow" id="addRow" type="button">+ строка</button>
 
-  <h2>Итоговый анализ</h2>
-  <div id="analysis"></div>
+  <h2>Исключено и ограничения</h2>
+  <ul class="excl" id="excl"></ul>
 
-  <p class="foot">Сформировано 09.10.2026. Все 20 — реальные запросы покупателей с прямыми ссылками (Telegram-чаты + Kwork). После адверсариальной проверки (3 независимых ревьюера + критик полноты) убраны задачи на источниках-объявлениях исполнителей и ручной работе; добавлен MAX-бот (стратегическая ниша). Где исходный текст краткий (напр. TASK-12), ТЗ — разумная концретизация, это помечено в «Исходной проблеме». Формулировки проблем — пересказ, не дословные цитаты. Ссылки проверены 09.10.2026: все 20 открываются (HTTP 200), тексты сверены (часть — live-проверкой, часть — по скрейпу радара, которым и собирались).</p>
+  <h2>Топ-5 для первого прогона</h2>
+  <div id="top5box"></div>
+
+  <p class="foot" id="foot"></p>
 </div>
 
 <script>
-const TASKS=[
-{id:"TASK-01",title:"ИИ-продажник в Instagram Direct (Manychat + ИИ)",src:"Telegram · @getinfobiz",link:"https://t.me/getinfobiz/48242",status:"real",diff:"hard",
-problem:"Заказчик ищет того, кто уже делал связку Manychat + ИИ для автоматизированных продаж в Instagram-директе: бот отвечает по скриптам, квалифицирует, тёплых отдаёт менеджеру.",
-result:"Входящее сообщение в Direct обрабатывается ИИ по материалам компании, диалог получает метку стадии, при триггере передаётся менеджеру.",
-func:["Приём входящего из Manychat по вебхуку","Ответ ИИ строго по загруженным скриптам/базе","Классификация диалога: думает / дорого / готов / нужен человек","Простановка метки в Manychat и отключение бота на стадии «готов»","Уведомление менеджеру с историей диалога"],
-test:"POST webhook: {\"user_id\":\"ig_1001\",\"text\":\"а сколько стоит размещение?\"}\nОжидаем ответ по прайсу + метка \"думает\".",
-accept:["На вопрос из скрипта бот отвечает текстом из базы, не выдумывает","Возражение «дорого» получает ответ-скрипт и метку «дорого»","При «готов» бот замолкает и менеджер получает уведомление","Повторное сообщение того же user_id не плодит дубль-диалог"],
-skills:"Webhook, LLM API (DeepSeek/OpenAI), хранение контекста диалога, Manychat API, идемпотентность",
-mvp:"8–12 ч",robust:"30–40 ч",assume:"MVP на тестовом вебхуке и мок-прайсе; robust — реальный Manychat Pro + антидубли + лимит 24 ч Meta",
-neg:"Повторный webhook с тем же message_id не должен слать второй ответ; при недоступности LLM — ставить диалог в очередь и уведомлять менеджера, а не падать.",
-comm:"Да. Переупаковывается под любой бизнес с входящими в директ (услуги, инфобиз, бьюти, агентства)."},
+const T=[
+/*01*/{id:"TASK-01",title:"ИИ-продажник в Instagram Direct (Manychat + ИИ)",plat:"Telegram",com:"@getinfobiz",link:"https://t.me/getinfobiz/48242",st:"C",diff:"hard",pub:"02.10.2026",chk:"09.10.2026 (live-embed)",
+ex:"Ищу человека, кто уже тестировал связку Manychat+ИИ для автоматизированных продаж в Instagram и кто может с этим помочь разобраться",
+problem:"Автоматизировать продажи в Instagram Direct: ИИ отвечает по скриптам, квалифицирует, тёплых отдаёт менеджеру. В источнике — поиск знания/консультации, поэтому статус C.",
+func:["Приём входящего из Manychat по вебхуку","Ответ ИИ по загруженным скриптам/базе","Классификация: думает/дорого/готов/нужен человек","Метка в Manychat + передача менеджеру на «готов»"],
+test:"POST webhook {user_id:\"ig_1001\",text:\"сколько стоит?\"} → ответ по прайсу + метка «думает».",
+accept:["Ответ только из базы, без выдумок","«Дорого» → ответ-скрипт + метка","«Готов» → бот молчит, менеджер уведомлён","Повтор user_id не плодит дубль"],
+skills:"Webhook, LLM API, контекст диалога, Manychat API, идемпотентность",mvp:"8–12 ч",robust:"30–40 ч",
+neg:"Повтор message_id не шлёт второй ответ; LLM недоступна → очередь + уведомление, не падение.",
+comm:"Да — под любой бизнес с входящими в директ."},
 
-{id:"TASK-02",title:"Запись на пробное + напоминание (школа языков)",src:"Telegram · @chatWH",link:"https://t.me/chatWH/217244",status:"real",diff:"medium",
-problem:"Школа иностранных языков спрашивает, как автоматизировать запись на пробное занятие и напоминание за день, раз Google-таблицы использовать нельзя.",
-result:"Ученик записывается через бота на свободный слот, запись падает в хранилище, бот напоминает за день до занятия.",
-func:["Бот показывает свободные слоты и принимает запись","Запись сохраняется (БД/CRM) без коллизий по времени","Напоминание за 24 ч до занятия","Отмена/перенос записи","Уведомление администратору о новой записи"],
-test:"Слоты: [2026-10-12 10:00, 12:00, 15:00]. Пользователь выбирает 12:00.\nОжидаем бронь 12:00, слот исчезает из списка.",
-accept:["Один слот нельзя забронировать дважды","Напоминание уходит ровно за 24 ч (проверка на подменённом времени)","Отмена освобождает слот","Админ видит ФИО/контакт/время записи"],
-skills:"Telegram Bot API, БД, планировщик (cron/APScheduler), транзакции/блокировки слотов",
-mvp:"6–10 ч",robust:"20–28 ч",assume:"MVP — SQLite + локальный планировщик; robust — часовые пояса, перенос, интеграция с CRM",
-neg:"Две одновременные брони одного слота: второй должен получить отказ. Если напоминание не отправилось (бот заблокирован) — пометить и уведомить админа.",
-comm:"Да. Шаблон под любые услуги с записью: клиники, репетиторы, салоны, автосервис."},
+/*02*/{id:"TASK-02",title:"Запись на пробное + напоминание (школа языков)",plat:"Telegram",com:"@chatWH",link:"https://t.me/chatWH/217244",st:"B",diff:"medium",pub:"06.10.2026",chk:"09.10.2026 (live-embed)",
+ex:"Подскажите, как лучше автоматизировать запись на пробное занятие для школы иностранных языков? Если гугл таблицы не можем теперь использовать? Будет ли удобно сделать интеграцию с битрикс? Нужно записать и за день напомнить",
+problem:"Бот записи на пробное со свободными слотами + напоминание за 24 ч; хранение в CRM/БД.",
+func:["Показ свободных слотов и запись","Хранение без коллизий по времени","Напоминание за 24 ч","Отмена/перенос","Уведомление администратору"],
+test:"Слоты [10:00,12:00,15:00], выбор 12:00 → бронь, слот исчезает.",
+accept:["Слот нельзя забронировать дважды","Напоминание ровно за 24 ч (на подменённом времени)","Отмена освобождает слот","Админ видит контакт+время"],
+skills:"Telegram Bot API, БД, планировщик, блокировки слотов",mvp:"6–10 ч",robust:"20–28 ч",
+neg:"Две одновременные брони → второму отказ. Напоминание не ушло (бот заблокирован) → пометка+алерт.",
+comm:"Да — шаблон под любые услуги с записью."},
 
-{id:"TASK-03",title:"Бот записи в клинику: WhatsApp + Instagram из РФ",src:"Telegram · @n8n_community",link:"https://t.me/n8n_community/234472",status:"real",diff:"hard",
-problem:"Спрашивают, реально ли из России сделать бота для клиники для записи клиентов в WhatsApp и такого же в Instagram, какие подводные камни.",
-result:"Единая логика записи, работающая в двух каналах (WhatsApp Business API + Instagram), запись в общее хранилище.",
-func:["Приём сообщений из WhatsApp и Instagram в один обработчик","Диалог записи: услуга → врач → слот","Запись в общую БД/CRM","Подтверждение клиенту в том же канале","Обработка ограничений доступа из РФ (прокси/провайдер API)"],
-test:"WhatsApp inbound: «хочу записаться к стоматологу на пятницу».\nОжидаем: выбор слота пятницы + подтверждение.",
-accept:["Запись из WhatsApp и из Instagram попадает в одно хранилище","Подтверждение уходит в исходный канал","Недоступность одного канала не ломает второй","Слоты не задваиваются между каналами"],
-skills:"WhatsApp Business API, Instagram Messaging API, роутинг каналов, прокси, общая БД",
-mvp:"12–16 ч",robust:"40–60 ч",assume:"MVP — один канал + мок второго; robust — верификация WABA, обход гео-ограничений, два живых канала",
-neg:"WhatsApp API вернул 24h-window error — бот не шлёт платный шаблон без подтверждения; при падении прокси — алерт, не тихий отказ.",
-comm:"Да. Клиники, медцентры, стоматологии — тиражируемый пакет «запись в мессенджерах»."},
+/*03*/{id:"TASK-03",title:"Бот записи в клинику: WhatsApp + Instagram из РФ",plat:"Telegram",com:"@n8n_community",link:"https://t.me/n8n_community/234472",st:"C",diff:"hard",pub:"06.10.2026",chk:"09.10.2026 (live-embed)",
+ex:"Подскажите, легко ли сейчас сделать бота для клиники, для записи клиентов в WhatsApp и такого же бота в Instagram? Есть ли подводные камни, реализуемо ли это из России?",
+problem:"Единая логика записи для WhatsApp + Instagram, запись в общее хранилище. В источнике — вопрос о реализуемости, статус C.",
+func:["Приём из WhatsApp и Instagram в один обработчик","Диалог: услуга → врач → слот","Запись в общую БД/CRM","Подтверждение в исходном канале","Обход гео-ограничений (прокси/провайдер API)"],
+test:"WhatsApp: «записаться к стоматологу на пятницу» → слоты пятницы + подтверждение.",
+accept:["Записи из обоих каналов в одно хранилище","Подтверждение в исходный канал","Падение одного канала не ломает второй","Слоты не задваиваются"],
+skills:"WhatsApp Business API, Instagram Messaging API, роутинг, прокси, общая БД",mvp:"12–16 ч",robust:"40–60 ч",
+neg:"24h-window error WhatsApp → без платного шаблона. Прокси упал → алерт.",
+comm:"Да — пакет «запись в мессенджерах» под клиники."},
 
-{id:"TASK-04",title:"Albato + Bitrix24 + Meta Conversions API (4 события)",src:"Telegram · @albato_helpers",link:"https://t.me/albato_helpers/31097",status:"real",diff:"medium",
-problem:"Нужна настройка автоматической передачи из Bitrix24 в Meta Conversions API четырёх событий: Lead, QualifiedLead, UnqualifiedLead, Purchase.",
-result:"Переход сделки по стадии в Б24 отправляет соответствующее событие в Meta CAPI с дедупликацией и хешированием контактов.",
-func:["Триггер на смену стадии сделки в Bitrix24 (вебхук)","Маппинг стадий → 4 события Meta","Хеширование email/телефона (SHA-256) для match quality","Дедупликация с пиксельным событием (event_id)","Лог отправок и ответов Meta"],
-test:"Deal moved to stage «Оплачен» → POST Meta CAPI {event_name:\"Purchase\", user_data:{em:<sha256>}}.",
-accept:["Каждая из 4 стадий шлёт ровно одно нужное событие","email/phone уходят только в хешированном виде","Повторный переход не задваивает событие (event_id)","Ошибка Meta логируется с кодом и ретраится"],
-skills:"Bitrix24 webhooks/REST, Meta Conversions API, хеширование, идемпотентность, Albato/Make",
-mvp:"6–9 ч",robust:"18–24 ч",assume:"MVP — через Albato + мок Pixel; robust — дедуп по event_id, ретраи, match-quality мониторинг",
-neg:"Сделка без email и телефона — не падать, слать событие с доступными параметрами и помечать low match. Таймаут Meta → очередь ретраев.",
-comm:"Да. Любой бизнес на Б24 с рекламой в Meta — востребованная интеграция под отчётность по конверсиям."},
+/*04*/{id:"TASK-04",title:"Albato + Bitrix24 + Meta Conversions API (4 события)",plat:"Telegram",com:"@albato_helpers",link:"https://t.me/albato_helpers/31097",st:"B",diff:"medium",pub:"04.10.2026",chk:"09.10.2026 (live-embed)",
+ex:"Нужна помощь с настройкой интеграции Albato + Битрикс24 + Meta Conversions API. Необходимо настроить автоматическую передачу из Битрикс24 в Meta четырёх событий: Lead, QualifiedLead, UnqualifiedLead, Purchase. Главная задача — чтобы в Meta Ads Manager отображались покупки, выручка и ROAS",
+problem:"Переход стадии сделки в Б24 шлёт событие в Meta CAPI с дедупликацией и хешированием контактов.",
+func:["Триггер на смену стадии в Б24","Маппинг стадий → 4 события Meta","Хеширование email/телефона (SHA-256)","Дедуп с пикселем (event_id)","Лог отправок и ответов Meta"],
+test:"Стадия «Оплачен» → POST Meta {event_name:\"Purchase\", user_data:{em:<sha256>}}.",
+accept:["Каждая стадия → ровно одно событие","ПДн только в хеше","Повтор не задваивает (event_id)","Ошибка Meta логируется и ретраится"],
+skills:"Bitrix24 REST/webhooks, Meta CAPI, хеширование, идемпотентность, Albato",mvp:"6–9 ч",robust:"18–24 ч",
+neg:"Сделка без email/телефона → событие с доступным + пометка low match. Таймаут Meta → ретраи.",
+comm:"Да — любой бизнес на Б24 с рекламой в Meta."},
 
-{id:"TASK-05",title:"CRM-воронки для автобизнеса в Bitrix24",src:"Kwork",link:"https://kwork.ru/projects/3253646/view",status:"real",diff:"medium",
-problem:"Заказчик просит создать в Bitrix24 воронки под автомобильный бизнес: отражать стадии, когда авто приобретён, отремонтирован, продан и т.д. (дата на бирже: 15.09.2026).",
-result:"Настроенные в Bitrix24 воронки и стадии под жизненный цикл авто, с автозадачами и переходами между стадиями.",
-func:["Воронка «авто»: приобретён → ремонт → предпродажа → продан","Автозадача ответственному при переходе на стадию","Поля карточки под авто (VIN, затраты, дата покупки/продажи)","Напоминание о зависших на стадии > N дней","Отчёт по марже и срокам по проданным авто"],
-test:"Сделка переведена на «Отремонтирован» → создаётся задача «выставить на продажу» ответственному.",
-accept:["Стадии и переходы соответствуют циклу авто","Переход на стадию создаёт нужную автозадачу","Зависшее на стадии авто эскалируется","Отчёт считает маржу (продажа − покупка − ремонт) верно"],
-skills:"Bitrix24 BP/роботы, пользовательские поля, REST API, расписания",
-mvp:"5–8 ч",robust:"16–24 ч",assume:"MVP — на тестовом портале Б24 с одной воронкой; robust — реальные поля, права, отчёты",
-neg:"Сделка без суммы покупки — отчёт не падает, помечает «нет данных». Двойной перевод на стадию не создаёт две одинаковые задачи.",
-comm:"Да. Пакет CRM-воронок под нишу (автобизнес, услуги, производство) — повторяемый под каждую отрасль."},
+/*05*/{id:"TASK-05",title:"CRM-воронки для автобизнеса в Bitrix24",plat:"Kwork",com:"проект 3253646",link:"https://kwork.ru/projects/3253646/view",st:"A",diff:"medium",pub:"15.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Нужно создать в битрикс воронки по автомобильному бизнесу когда автомобиль был приобретен, отремонтирован, продан и т.д. Полное ТЗ смогу прислать в личные сообщения",
+problem:"Воронки и стадии под жизненный цикл авто с автозадачами и переходами.",
+func:["Воронка: приобретён → ремонт → предпродажа → продан","Автозадача при переходе на стадию","Поля карточки под авто (VIN, затраты, даты)","Эскалация зависших > N дней","Отчёт по марже и срокам"],
+test:"Переход на «Отремонтирован» → автозадача «выставить на продажу».",
+accept:["Стадии соответствуют циклу авто","Переход создаёт нужную задачу","Зависшее авто эскалируется","Отчёт считает маржу верно"],
+skills:"Bitrix24 BP/роботы, поля, REST, расписания",mvp:"5–8 ч",robust:"16–24 ч",
+neg:"Сделка без суммы покупки → отчёт не падает, «нет данных». Двойной переход не дублирует задачу.",
+comm:"Да — пакет CRM-воронок под нишу."},
 
-{id:"TASK-06",title:"Бот подписки на закрытый чат с оплатой и продлением",src:"Telegram · @pixeltechspec",link:"https://t.me/pixeltechspec/1425",status:"real",diff:"medium",
-problem:"Нужен бот, который принимает оплату за подписку на закрытый чат/канал, выдаёт ссылку-приглашение и ежемесячно продлевает (или отключает неоплативших).",
-result:"Оплата → одноразовая инвайт-ссылка → доступ; по истечении месяца — напоминание и кик при неоплате.",
-func:["Приём оплаты (ЮKassa/Telegram Payments/крипто)","Генерация одноразовой invite-ссылки после оплаты","Учёт даты окончания подписки","Напоминание за N дней до конца","Автокик из чата при неоплате"],
-test:"Платёж успешен → бот выдаёт t.me/+<uniq>, срок = +30 дней. На 31-й день без оплаты — удаление из чата.",
-accept:["Инвайт-ссылка одноразовая и персональная","Повторный платёж продлевает, а не создаёт второй доступ","Неоплативший удаляется строго после срока","Вебхук платежа идемпотентен (нет двойного зачисления)"],
-skills:"Telegram Bot API (ban/invite), платёжный провайдер, вебхуки оплаты, планировщик, БД подписок",
-mvp:"8–12 ч",robust:"24–32 ч",assume:"MVP — Telegram Payments тест-режим; robust — реальный эквайринг, возвраты, продления",
-neg:"Дубль-вебхук платежа не продлевает дважды. Платёж прошёл, но выдача ссылки упала — повторная выдача по тому же payment_id, не новый платёж.",
-comm:"Да. Приватные сообщества, клубы, инфопродукты — продукт с рекуррентной выручкой (и для нас как SaaS)."},
+/*06*/{id:"TASK-06",title:"Бот подписки на чат с оплатой и продлением",plat:"Telegram",com:"@pixeltechspec",link:"https://t.me/pixeltechspec/1425",st:"A",diff:"medium",pub:"03.10.2026",chk:"09.10.2026 (скрейп радара; embed закрыт)",
+ex:"ИЩУ человека, который может сделать бота или подключить чат в ТГ к существующему боту, который будет принимать оплату за подписку на чат и выдавать ссылку + продлевать эти оплаты ежемесячно",
+problem:"Оплата → одноразовая инвайт-ссылка → доступ; продление ежемесячно, кик при неоплате.",
+func:["Приём оплаты (ЮKassa/Telegram Payments)","Одноразовая invite-ссылка после оплаты","Учёт даты окончания","Напоминание за N дней","Автокик при неоплате"],
+test:"Платёж успешен → t.me/+<uniq>, срок +30 дней. 31-й день без оплаты → кик.",
+accept:["Инвайт одноразовый и персональный","Повтор оплаты продлевает, не дублирует доступ","Кик строго после срока","Вебхук оплаты идемпотентен"],
+skills:"Telegram Bot API (ban/invite), платёжный провайдер, вебхуки, планировщик, БД",mvp:"8–12 ч",robust:"24–32 ч",
+neg:"Дубль-вебхук не продлевает дважды. Платёж прошёл, выдача упала → повтор по payment_id.",
+comm:"Да — приватные клубы/инфопродукты, рекуррентная выручка."},
 
-{id:"TASK-07",title:"Подключение оплаты bePaid к Telegram-боту",src:"Telegram · @pixeltechspec",link:"https://t.me/pixeltechspec/1450",status:"real",diff:"simple",
-problem:"Просят быстро и корректно настроить связку Telegram-бота с оплатой через bePaid: подключить оплату и проверить, что всё работает без ошибок.",
-result:"Пользователь в боте инициирует оплату, проходит на bePaid, бот получает статус и подтверждает.",
-func:["Создание платежа в bePaid из бота","Редирект/ссылка на оплату","Приём вебхука о статусе платежа","Подтверждение пользователю при успехе","Обработка отказа/отмены"],
-test:"Пользователь жмёт «Оплатить 1000 ₽» → ссылка bePaid → вебхук status=successful → бот пишет «Оплата получена».",
-accept:["Успешная оплата подтверждается в боте","Отклонённый платёж обрабатывается сообщением-ошибкой","Подпись вебхука проверяется","Один платёж = одно подтверждение"],
-skills:"bePaid API, проверка подписи вебхука, Telegram Bot API",
-mvp:"3–5 ч",robust:"8–12 ч",assume:"MVP — тестовый магазин bePaid; robust — проверка подписи, идемпотентность, возвраты",
-neg:"Вебхук с неверной подписью — отклонить. Повторный вебхук successful — не слать второе подтверждение.",
-comm:"Да. Компонент «приём платежей в боте» переиспользуется во всех ботах с оплатой."},
+/*07*/{id:"TASK-07",title:"Подключение оплаты bePaid к Telegram-боту",plat:"Telegram",com:"@pixeltechspec",link:"https://t.me/pixeltechspec/1450",st:"A",diff:"simple",pub:"07.10.2026",chk:"09.10.2026 (скрейп радара; embed закрыт)",
+ex:"Ищу специалиста, который сможет быстро и корректно настроить связку Telegram-бота с оплатой через bePaid. Нужно подключить оплату и проверить, чтобы всё работало без ошибок",
+problem:"Пользователь инициирует оплату, проходит на bePaid, бот получает статус и подтверждает.",
+func:["Создание платежа в bePaid из бота","Ссылка на оплату","Приём вебхука о статусе","Подтверждение при успехе","Обработка отказа/отмены"],
+test:"«Оплатить 1000 ₽» → ссылка bePaid → вебхук successful → «Оплата получена».",
+accept:["Успех подтверждается","Отказ → сообщение-ошибка","Подпись вебхука проверяется","Один платёж = одно подтверждение"],
+skills:"bePaid API, проверка подписи, Telegram Bot API",mvp:"3–5 ч",robust:"8–12 ч",
+neg:"Неверная подпись → отклонить. Повтор successful → без второго подтверждения.",
+comm:"Да — компонент «оплата в боте» переиспользуется везде."},
 
-{id:"TASK-08",title:"Парсер недвижимости по расписанию + бот управления",src:"Kwork",link:"https://kwork.ru/projects/3058260/view",status:"real",diff:"hard",
-problem:"Нужен парсер, который ежедневно по расписанию собирает объекты недвижимости и пишет в БД (прокси, многопоток, асинхронность), плюс Telegram-бот для управления. Деплой и запуск на сервере.",
-result:"Планировщик собирает объекты в БД без дублей, бот показывает статистику и управляет запуском/фильтрами.",
-func:["Асинхронный парсер источника(ов) недвижимости","Запуск по расписанию (ежедневно)","Запись в БД с дедупликацией по id объекта","Ротация прокси и обработка банов","Бот управления: статус, запуск, фильтры, выгрузка"],
-test:"Запуск парсера → в БД 100 объектов. Повтор на следующий день → добавлены только новые, дубли не задвоены.",
-accept:["Новые объекты пишутся, существующие обновляются без дублей","Расписание срабатывает автоматически","Бан/429 источника обрабатывается ротацией прокси + ретрай","Бот отдаёт корректную статистику по БД"],
-skills:"Python async (aiohttp), парсинг, прокси-ротация, БД, планировщик, Telegram Bot API, деплой",
-mvp:"8–12 ч",robust:"24–36 ч",assume:"MVP — 1 источник, SQLite, локальный запуск; robust — многопоток, прокси-пул, сервер, мониторинг",
-neg:"Источник сменил разметку — парсер шлёт алерт «протух», не пишет мусор. Прокси все забанены — пауза с бэкоффом, не краш.",
-comm:"Да. Парсер+бот под любую нишу: недвижимость, авто, товары, тендеры — тиражируемый каркас."},
+/*08*/{id:"TASK-08",title:"Парсер недвижимости по расписанию + бот",plat:"Kwork",com:"проект 3058260",link:"https://kwork.ru/projects/3058260/view",st:"A",diff:"hard",pub:"27.12.2025",chk:"09.10.2026 (HTTP 200)",
+ex:"Нужен парсер который ежедневно по расписанию объекты недвижимости и записывать в БД (прокси, многопоток, ассинхронность) + бот для управления. Деплой и запуск на сервере",
+problem:"Планировщик собирает объекты в БД без дублей, бот управляет запуском/фильтрами.",
+func:["Асинхронный парсер источника(ов)","Запуск по расписанию","Запись в БД с дедупом по id","Ротация прокси + обработка банов","Бот: статус/запуск/фильтры/выгрузка"],
+test:"Запуск → 100 объектов в БД. Следующий день → только новые, без дублей.",
+accept:["Новое пишется, существующее обновляется без дублей","Расписание срабатывает","429/бан → ротация+ретрай","Бот отдаёт корректную статистику"],
+skills:"Python async, парсинг, прокси-ротация, БД, планировщик, Telegram Bot API, деплой",mvp:"8–12 ч",robust:"24–36 ч",
+neg:"Сменилась разметка → алерт «протух», не пишет мусор. Прокси забанены → пауза с бэкоффом.",
+comm:"Да — каркас «парсер+бот» под любую нишу."},
 
-{id:"TASK-09",title:"AI-анализ записей звонков + интеграция в CRM",src:"Kwork",link:"https://kwork.ru/projects/3264377/view",status:"real",diff:"hard",
-problem:"Нужна система анализа записей звонков сотрудников с интеграцией в действующую CRM (intrum). Объём ~5000-6000 звонков в день; в первой версии — полный разбор выбранного звонка (дата на бирже: 06.10.2026).",
-result:"Запись звонка транскрибируется, ИИ делает саммари и оценку, результат пишется в карточку CRM.",
-func:["Приём/загрузка аудиозаписи звонка","Транскрибация (ASR) речи в текст","Саммари и разбор по критериям (скрипт, возражения, итог)","Запись результата в карточку CRM (intrum)","Очередь обработки под объём (батч)"],
-test:"Аудио 3-мин звонка → транскрипт + саммари {итог, возражения, следующий шаг} → поле в карточке CRM заполнено.",
-accept:["Транскрипт соответствует речи (проверка на эталоне)","Саммари содержит итог и ключевые пункты","Результат попадает в нужную карточку CRM","Сбой на одном звонке не останавливает очередь"],
-skills:"ASR (Whisper/аналог), LLM-саммаризация, очереди/батч, CRM API (intrum), обработка ошибок",
-mvp:"10–14 ч (один звонок end-to-end)",robust:"30–45 ч (поток 5-6к/день)",assume:"MVP — разбор одного звонка на моке CRM; robust — очередь, масштаб, мониторинг качества",
-neg:"Тихая/битая запись — пометить «не распознано», не писать мусор в CRM. CRM недоступна — результат в очередь, не потеря.",
-comm:"Да. Контроль качества звонков через ИИ — востребовано в отделах продаж и колл-центрах (рекуррент по объёму)."},
+/*09*/{id:"TASK-09",title:"AI-анализ записей звонков + интеграция в CRM",plat:"Kwork",com:"проект 3264377",link:"https://kwork.ru/projects/3264377/view",st:"A",diff:"hard",pub:"06.10.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Требуется локальная система анализа записей звонков сотрудников с интеграцией в действующую CRM intrum. Объём — около 5000-6000 звонков в день. В первой версии нужен полный разбор выбранного звонка",
+problem:"Запись транскрибируется, ИИ делает саммари и оценку, результат → карточка CRM.",
+func:["Приём/загрузка аудиозаписи","Транскрибация (ASR)","Саммари + разбор по критериям","Запись в карточку CRM (intrum)","Очередь/батч под объём"],
+test:"Аудио 3 мин → транскрипт + саммари {итог,возражения,шаг} → поле в CRM.",
+accept:["Транскрипт соответствует речи (эталон)","Саммари содержит итог","Результат в нужной карточке","Сбой на одном звонке не рушит очередь"],
+skills:"ASR (Whisper), LLM-саммари, очереди, CRM API (intrum)",mvp:"10–14 ч",robust:"30–45 ч",
+neg:"Тихая запись → «не распознано», не мусор в CRM. CRM недоступна → очередь.",
+comm:"Да — контроль качества звонков, рекуррент по объёму."},
 
-{id:"TASK-10",title:"MVP-сервис на No-Code (Airtable + Make + OpenAI)",src:"Telegram · @zerocoders",link:"https://t.me/zerocoders/158933",status:"real",diff:"medium",
-problem:"Ищут, кто за деньги соберёт MVP-сервис на No-Code: Airtable + Softr + Make.com + OpenAI/Replicate API + Twilio.",
-result:"Работающий MVP: форма/интерфейс → данные в Airtable → сценарий Make с вызовом ИИ → результат пользователю.",
-func:["Хранение данных в Airtable","Интерфейс на Softr (или форма)","Сценарий Make на событие","Вызов OpenAI/Replicate с обработкой ответа","Уведомление/результат пользователю (Twilio/email)"],
-test:"Новая строка в Airtable {prompt:\"описание\"} → Make вызывает OpenAI → поле result заполняется ответом.",
-accept:["Новая запись запускает сценарий","Ответ ИИ пишется обратно в запись","Ошибка API не ломает сценарий (ветка-обработчик)","Пользователь получает результат в заявленном канале"],
-skills:"Airtable, Make.com, OpenAI API, Softr, Twilio, обработка ошибок в сценарии",
-mvp:"6–10 ч",robust:"18–26 ч",assume:"MVP — 1 сценарий end-to-end; robust — лимиты API, ретраи, биллинг-контроль токенов",
-neg:"OpenAI вернул 429/5xx — ветка ретрая и пометка записи «ошибка», не молчаливый пропуск. Пустой prompt — валидация до вызова API.",
-comm:"Да. Быстрые MVP для стартапов/проверки гипотез — отдельная услуга «MVP за неделю»."},
+/*10*/{id:"TASK-10",title:"MVP-сервис на No-Code (Airtable + Make + OpenAI)",plat:"Telegram",com:"@zerocoders",link:"https://t.me/zerocoders/158933",st:"A",diff:"medium",pub:"03.10.2026",chk:"09.10.2026 (live-embed)",
+ex:"Тут в чате правилами не запрещено искать людей, кто за деньги готов собрать MVP сервис на No-Code (Airtable + Softr + Make.com + OpenAI/Replicate API + Twilio)?",
+problem:"MVP: форма/интерфейс → Airtable → сценарий Make с вызовом ИИ → результат пользователю.",
+func:["Хранение в Airtable","Интерфейс на Softr/форма","Сценарий Make на событие","Вызов OpenAI/Replicate + обработка ответа","Уведомление (Twilio/email)"],
+test:"Новая строка {prompt} → Make вызывает OpenAI → поле result заполняется.",
+accept:["Запись запускает сценарий","Ответ ИИ пишется в запись","Ошибка API → ветка-обработчик","Результат в заявленном канале"],
+skills:"Airtable, Make.com, OpenAI API, Softr, Twilio",mvp:"6–10 ч",robust:"18–26 ч",
+neg:"429/5xx OpenAI → ретрай + пометка. Пустой prompt → валидация до вызова.",
+comm:"Да — «MVP за неделю» для стартапов."},
 
-{id:"TASK-11",title:"AI-бот администратор клиники (GPT + база знаний + запись)",src:"Kwork",link:"https://kwork.ru/projects/3259826/view",status:"real",diff:"hard",
-problem:"Нужен умный диалог на GPT: отвечает на вопросы про услуги, цены, врачей, использует предоставленную базу знаний, ведёт диалог к записи и передаёт сложные вопросы человеку (дата на бирже: 27.09.2026).",
-result:"Бот консультирует по базе знаний клиники, доводит до записи и эскалирует сложные случаи администратору.",
-func:["Диалог на GPT по услугам/ценам/врачам","Ответы строго из загруженной базы знаний (RAG)","Доведение диалога до записи (слот/контакт)","Передача сложного вопроса человеку с историей","Лог вопросов без ответа для пополнения базы"],
-test:"База: «Приём терапевта 1500 ₽». Вопрос «сколько стоит терапевт?» → ответ 1500 + предложение записи. Вопрос вне базы → эскалация.",
-accept:["Ответы берутся из базы, без галлюцинаций","Диалог завершается записью или контактом","Сложный/неизвестный вопрос уходит человеку, не выдумка","Обновление базы меняет ответы без правки кода"],
-skills:"LLM API (GPT), эмбеддинги/RAG, чанкинг документов, FSM диалога записи, Telegram Bot API",
-mvp:"10–14 ч",robust:"30–40 ч",assume:"MVP — малая база + топ-k; robust — обновляемая база, оценка уверенности, интеграция с расписанием",
-neg:"Вопрос с опечатками/на англ. — находить по смыслу, не падать. Противоречие в базе — не выбирать случайно, а звать человека.",
-comm:"Да. AI-администратор под клиники, салоны, услуги — массовый продукт с базой знаний и записью."},
+/*11*/{id:"TASK-11",title:"AI-бот администратор клиники (GPT + база + запись)",plat:"Kwork",com:"проект 3259826",link:"https://kwork.ru/projects/3259826/view",st:"A",diff:"hard",pub:"27.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Умный диалог на базе GPT — отвечает на вопросы про услуги, цены, врачей; использует базу знаний (предоставим); ведёт диалог к записи; передаёт сложные вопросы человеку",
+problem:"Бот консультирует по базе знаний, доводит до записи, эскалирует сложное.",
+func:["Диалог на GPT по услугам/ценам/врачам","Ответы из базы знаний (RAG)","Доведение до записи","Передача человеку с историей","Лог вопросов без ответа"],
+test:"База «терапевт 1500 ₽». «сколько стоит терапевт?» → 1500 + запись. Вне базы → эскалация.",
+accept:["Ответы из базы, без галлюцинаций","Диалог завершается записью/контактом","Неизвестное → человеку","Обновление базы без правки кода"],
+skills:"LLM API, RAG, чанкинг, FSM записи, Telegram Bot API",mvp:"10–14 ч",robust:"30–40 ч",
+neg:"Опечатки/англ → по смыслу. Противоречие в базе → человеку.",
+comm:"Да — AI-администратор под клиники/салоны/услуги."},
 
-{id:"TASK-12",title:"Сценарий обработки заявок в Make/n8n",src:"Telegram · @chat_neuro",link:"https://t.me/chat_neuro/63426",status:"real",diff:"medium",
-problem:"Заказчик ищет, кто поможет написать сценарий в Make (исходный запрос краткий). Концретизируем в типовую задачу: сценарий приёма и квалификации заявки с уведомлением менеджеру.",
-result:"Заявка из формы/бота проходит сценарий: квалификация → запись в CRM/Sheets → уведомление менеджеру о тёплых.",
-func:["Приём заявки (вебхук/форма)","Квалификация по правилам/ИИ","Запись в CRM или Google Sheets","Уведомление менеджеру о квалифицированных","Тег/маршрут по сегменту"],
-test:"Заявка {budget:150000, ready:\"да\"} → qualified=true → строка в Sheets + уведомление менеджеру.",
-accept:["Каждая заявка попадает в хранилище","Квалифицированные помечаются и уходят менеджеру","Неполная заявка не ломает сценарий","Нет дублей по email/телефону"],
-skills:"Make/n8n, вебхуки, Google Sheets/CRM API, условная логика, уведомления",
-mvp:"4–7 ч",robust:"14–20 ч",assume:"MVP — линейный сценарий; robust — дедуп, ретраи, несколько источников/сегментов",
-neg:"Заявка без контакта — в отдельную ветку «уточнить», не в основную воронку. Недоступность Sheets — очередь, не потеря заявки.",
-comm:"Да. Базовая воронка — фундамент почти под любого клиента с входящими заявками."},
+/*12*/{id:"TASK-12",title:"Сценарий обработки заявок в Make/n8n",plat:"Telegram",com:"@chat_neuro",link:"https://t.me/chat_neuro/63426",st:"C",diff:"medium",pub:"04.10.2026",chk:"09.10.2026 (live-embed)",
+ex:"Добрый день кто может помочь в написании сценария в make ?",
+problem:"Источник краткий (просьба о помощи с Make, статус C). Концретизируем: сценарий приёма и квалификации заявки с уведомлением менеджеру.",
+func:["Приём заявки (вебхук/форма)","Квалификация по правилам/ИИ","Запись в CRM/Sheets","Уведомление менеджеру о тёплых","Тег/маршрут по сегменту"],
+test:"Заявка {budget:150000, ready:\"да\"} → qualified=true → строка в Sheets + уведомление.",
+accept:["Заявка попадает в хранилище","Квалифицированные → менеджеру","Неполная не ломает сценарий","Нет дублей по email/телефону"],
+skills:"Make/n8n, вебхуки, Sheets/CRM API, условная логика",mvp:"4–7 ч",robust:"14–20 ч",
+neg:"Заявка без контакта → ветка «уточнить». Sheets недоступен → очередь.",
+comm:"Да — базовая воронка под любого с входящими заявками."},
 
-{id:"TASK-13",title:"HR-автоворонка с ИИ: контакт → собеседование",src:"Kwork",link:"https://kwork.ru/projects/3254669/view",status:"real",diff:"medium",
-problem:"Создать автоматическую воронку найма: от получения контакта кандидата до записи на Zoom-встречу или очное собеседование. Воронка должна настраиваться под разные вакансии (дата на бирже: 17.09.2026).",
-result:"Кандидат проходит анкету/скрининг, подходящие автоматически получают слот собеседования, рекрутер видит статусы.",
-func:["Приём контакта кандидата (бот/форма)","Скрининг-вопросы и отсев по критериям вакансии","Запись подходящих на Zoom/очный слот","Конфигурация воронки под разные вакансии","Уведомление рекрутеру + статус кандидата"],
-test:"Кандидат с опытом 3 года на вакансию «от 2 лет» → проходит скрининг → предложен слот Zoom. С опытом 0 лет → вежливый отказ.",
-accept:["Скрининг отсеивает по заданным критериям","Подходящие получают слот без участия рекрутера","Воронка переключается между вакансиями конфигом","Рекрутер видит статус каждого кандидата"],
-skills:"Bot/форма, FSM, логика скрининга, календарь/Zoom API, уведомления, хранение статусов",
-mvp:"6–9 ч",robust:"18–26 ч",assume:"MVP — одна вакансия + мок-календарь; robust — несколько вакансий, Zoom/календарь, аналитика воронки",
-neg:"Кандидат не ответил на часть вопросов — не падать, переспросить/пометить «неполный». Занятый слот не выдаётся дважды.",
-comm:"Да. HR-автоворонка — востребована у агентств найма, сетей, компаний с потоком вакансий."},
+/*13*/{id:"TASK-13",title:"HR-автоворонка с ИИ: контакт → собеседование",plat:"Kwork",com:"проект 3254669",link:"https://kwork.ru/projects/3254669/view",st:"A",diff:"medium",pub:"17.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Создать автоматическую воронку найма: от получения контакта кандидата до записи на Zoom-встречу или очное собеседование. Воронка должна настраиваться под разные вакансии",
+problem:"Кандидат проходит скрининг, подходящие получают слот, рекрутер видит статусы.",
+func:["Приём контакта кандидата","Скрининг и отсев по критериям вакансии","Запись подходящих на Zoom/очно","Конфиг воронки под вакансии","Уведомление рекрутеру + статус"],
+test:"Опыт 3 года на «от 2 лет» → слот Zoom. Опыт 0 → вежливый отказ.",
+accept:["Скрининг отсеивает по критериям","Подходящие получают слот сами","Воронка переключается конфигом","Статус каждого виден"],
+skills:"Bot/форма, FSM, логика скрининга, Zoom/календарь API",mvp:"6–9 ч",robust:"18–26 ч",
+neg:"Нет ответа на часть вопросов → «неполный». Занятый слот не выдаётся дважды.",
+comm:"Да — агентства найма, сети, компании с потоком вакансий."},
 
-{id:"TASK-14",title:"Telegram Mini App по макету (визуал + данные)",src:"Telegram · @pixeltechspec",link:"https://t.me/pixeltechspec/1445",status:"real",diff:"medium",
-problem:"Ищут спеца по Mini App в Telegram для правок действующего мини-аппа: внести изменения в визуал по примеру.",
-result:"Mini App с нужным визуалом, данными из бэкенда и корректной интеграцией с Telegram WebApp API.",
-func:["Верстка экрана по макету (адаптив)","Интеграция Telegram WebApp API (initData, тема)","Загрузка данных из бэкенда/вебхука","Действие пользователя → отправка на сервер","Валидация initData на сервере"],
-test:"Открытие Mini App → подтягивается каталог из API → выбор товара → данные уходят боту с валидным initData.",
-accept:["initData проверяется подписью на сервере","Верстка совпадает с макетом на мобильном","Данные грузятся и ошибки показываются","Тема Telegram (светлая/тёмная) учитывается"],
-skills:"Telegram WebApp API, фронтенд (HTML/JS/React), проверка initData (HMAC), бэкенд-API",
-mvp:"6–10 ч",robust:"18–26 ч",assume:"MVP — 1 экран + мок-данные; robust — реальный бэкенд, авторизация, оплаты в WebApp",
-neg:"Поддельный initData — сервер отклоняет. API данных недоступен — экран-заглушка, не белый экран.",
-comm:"Да. Mini Apps — витрины/каталоги/личные кабинеты внутри Telegram, растущий спрос."},
+/*14*/{id:"TASK-14",title:"Telegram Mini App по макету",plat:"Telegram",com:"@pixeltechspec",link:"https://t.me/pixeltechspec/1445",st:"A",diff:"medium",pub:"05.10.2026",chk:"09.10.2026 (скрейп радара; embed закрыт)",
+ex:"Ищу спеца по миниапп в телеграм для редактирования действующего миниапп: нужно внести изменения в визуал, предварительно его сделав по примеру",
+problem:"Mini App с нужным визуалом, данными из бэкенда, интеграцией Telegram WebApp API.",
+func:["Верстка экрана по макету (адаптив)","Telegram WebApp API (initData, тема)","Загрузка данных из бэкенда","Действие → отправка на сервер","Валидация initData на сервере"],
+test:"Открытие → каталог из API → выбор товара → данные боту с валидным initData.",
+accept:["initData проверяется подписью","Верстка совпадает с макетом на мобильном","Ошибки данных показываются","Тема Telegram учитывается"],
+skills:"Telegram WebApp API, фронтенд, HMAC initData, бэкенд-API",mvp:"6–10 ч",robust:"18–26 ч",
+neg:"Поддельный initData → отклонить. API недоступен → заглушка, не белый экран.",
+comm:"Да — витрины/кабинеты внутри Telegram."},
 
-{id:"TASK-15",title:"ИИ-обработка заявок и формирование КП",src:"Kwork",link:"https://kwork.ru/projects/3265572/view",status:"real",diff:"hard",
-problem:"Нужно сократить время обработки заявок: автоматизировать расчёт стоимости и подготовку коммерческого предложения, исключить ручной перенос. Приём заявок в форматах PDF, email и др. (дата на бирже: 09.10.2026).",
-result:"Заявка (PDF/email/текст) распознаётся, из неё извлекаются позиции, считается стоимость и формируется КП.",
-func:["Приём заявки в разных форматах (PDF, email, текст)","Извлечение позиций/параметров (LLM/OCR)","Расчёт стоимости по прайсу/правилам","Генерация КП (документ/PDF)","Сохранение и отправка КП заказчику"],
-test:"Входящая заявка с 3 позициями в PDF → извлечены позиции → посчитана сумма по прайсу → сформирован КП с итогом.",
-accept:["Позиции извлекаются из разных форматов корректно","Сумма считается по прайсу без ошибок (юнит-тест)","КП формируется в читаемом виде","Нераспознанная позиция помечается, не теряется молча"],
-skills:"LLM/OCR-извлечение, парсинг PDF/email, расчётная логика, генерация документов, обработка ошибок",
-mvp:"10–14 ч",robust:"28–38 ч",assume:"MVP — один формат + простой прайс; robust — разные форматы, сложный прайс, шаблоны КП",
-neg:"Заявка без части данных — запросить уточнение/пометить, не считать по нулям. Нечитаемый PDF (скан) → OCR или понятная ошибка.",
-comm:"Да. Авто-обработка заявок и генерация КП — востребовано в B2B, стройке, услугах с расчётом (сокращает ручной труд)."},
+/*15*/{id:"TASK-15",title:"ИИ-обработка заявок и формирование КП",plat:"Kwork",com:"проект 3265572",link:"https://kwork.ru/projects/3265572/view",st:"A",diff:"hard",pub:"09.10.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Цель: сократить время обработки клиентских заявок, автоматизировать расчёт стоимости и подготовку КП, исключить ручной перенос информации. Приём заявок в форматах PDF, E(mail)…",
+problem:"Заявка (PDF/email/текст) → извлечение позиций → расчёт стоимости → КП.",
+func:["Приём заявки в разных форматах","Извлечение позиций (LLM/OCR)","Расчёт по прайсу/правилам","Генерация КП (документ/PDF)","Сохранение/отправка КП"],
+test:"Заявка с 3 позициями в PDF → позиции → сумма по прайсу → КП с итогом.",
+accept:["Позиции извлекаются из разных форматов","Сумма верна (юнит-тест)","КП читаемый","Нераспознанное помечается"],
+skills:"LLM/OCR, парсинг PDF/email, расчёт, генерация документов",mvp:"10–14 ч",robust:"28–38 ч",
+neg:"Нет части данных → уточнение, не нули. Скан-PDF → OCR или понятная ошибка.",
+comm:"Да — B2B, стройка, услуги с расчётом."},
 
-{id:"TASK-16",title:"CRM для обработки заявок с сайтов + уведомления",src:"Kwork",link:"https://kwork.ru/projects/3261146/view",status:"real",diff:"medium",
-problem:"Нужно создать CRM по макету (или предложить готовую сборку) для обработки поступающих заявок с сайтов; CRM нужно установить и настроить (дата на бирже: 30.09.2026).",
-result:"Заявки с сайтов попадают в CRM, менеджер мгновенно уведомляется, ничего не теряется.",
-func:["Приём заявок с нескольких сайтов (вебхук/форма)","Единое хранилище заявок (CRM/БД)","Мгновенное уведомление менеджеру (Telegram)","Антидубль и антиспам (honeypot)","Статусы обработки заявки"],
-test:"POST {site:\"a.ru\",name:\"Иван\",phone:\"+7900...\"} → заявка в CRM + уведомление менеджеру за секунды.",
-accept:["Заявка доходит в CRM и в Telegram","Дубль-сабмит (двойной клик) не создаёт две заявки","Спам с honeypot отсекается","Падение CRM не теряет заявку (ретрай/очередь)"],
-skills:"Вебхуки, CRM/БД, Telegram Bot API, валидация, антиспам, идемпотентность",
-mvp:"3–5 ч",robust:"10–16 ч",assume:"MVP — один сайт → CRM+TG; robust — несколько сайтов, маршрутизация, статусы, аналитика",
-neg:"Дубль-POST в пределах 2 сек — склеить. Telegram недоступен — записать в CRM и повторить отправку позже.",
-comm:"Да. «Заявки с сайта в CRM+Telegram» — самый частый входной заказ, зацепка под большее."},
+/*16*/{id:"TASK-16",title:"CRM для обработки заявок с сайтов + уведомления",plat:"Kwork",com:"проект 3261146",link:"https://kwork.ru/projects/3261146/view",st:"A",diff:"medium",pub:"30.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Необходимо создать crm по макету или предложить готовую сборку. CRM нужна для обработки поступаемых заявок с сайтов, функционал в макете. CRM необходимо установить",
+problem:"Заявки с сайтов → CRM, менеджер уведомляется мгновенно, ничего не теряется.",
+func:["Приём заявок с нескольких сайтов","Единое хранилище (CRM/БД)","Мгновенное уведомление менеджеру (TG)","Антидубль + антиспам (honeypot)","Статусы обработки"],
+test:"POST {site,name,phone} → заявка в CRM + уведомление за секунды.",
+accept:["Заявка в CRM и TG","Дубль-сабмит не создаёт две","Honeypot отсекает спам","Падение CRM → ретрай/очередь"],
+skills:"Вебхуки, CRM/БД, Telegram Bot API, валидация, идемпотентность",mvp:"3–5 ч",robust:"10–16 ч",
+neg:"Дубль-POST ≤2 сек → склейка. TG недоступен → в CRM + повтор позже.",
+comm:"Да — самый частый входной заказ, зацепка под большее."},
 
-{id:"TASK-17",title:"Сбор данных по API (YouTube, Salesbot) → Google Sheets",src:"Kwork",link:"https://kwork.ru/projects/3254410/view",status:"real",diff:"medium",
-problem:"Нужен разработчик с опытом нейросетей и автоматизации: подтягивать данные по API с YouTube и Salesbot и интегрировать их в Google Sheets (дата на бирже: 16.09.2026).",
-result:"По расписанию данные из внешних API собираются и пишутся в Google Sheets в нужном виде, без ручного копирования.",
-func:["Забор данных из YouTube Data API","Забор данных из Salesbot API","Нормализация/маппинг полей","Запись/обновление в Google Sheets","Запуск по расписанию + лог ошибок"],
-test:"Запуск → в лист падают метрики видео за вчера (просмотры/лайки) и заявки из Salesbot, строки не задваиваются по id.",
-accept:["Данные из обоих API попадают в Sheets","Повторный запуск обновляет, а не дублирует (ключ по id/дате)","Лимит/ошибка API обрабатывается ретраем, а не крашем","Расписание срабатывает автоматически"],
-skills:"YouTube Data API, Salesbot API, Google Sheets API, маппинг данных, планировщик, обработка лимитов",
-mvp:"5–8 ч",robust:"16–22 ч",assume:"MVP — один лист, один прогон; robust — инкрементальная выгрузка, дедуп, квоты API, алерты",
-neg:"API вернул 403/квоту — ретрай с бэкоффом и пометка в логе, не пустая перезапись листа. Пустой ответ не затирает прежние данные.",
-comm:"Да. Сбор метрик из разных сервисов в Sheets/BI — востребовано для отчётности агентств и отделов маркетинга."},
+/*17*/{id:"TASK-17",title:"Сбор данных по API (YouTube/Salesbot) → Google Sheets",plat:"Kwork",com:"проект 3254410",link:"https://kwork.ru/projects/3254410/view",st:"A",diff:"medium",pub:"16.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Вы должны иметь опыт работы с нейросетями, автоматизацией, написанию кода по автоматизации задач, умеете подтягивать данные по API с ютуба, salesbota, интегрировать в гугл таблицы",
+problem:"По расписанию данные из внешних API собираются и пишутся в Google Sheets.",
+func:["Забор из YouTube Data API","Забор из Salesbot API","Нормализация/маппинг полей","Запись/обновление в Sheets","Расписание + лог ошибок"],
+test:"Запуск → метрики видео за вчера + заявки Salesbot в лист, без дублей по id.",
+accept:["Данные из обоих API в Sheets","Повтор обновляет, не дублирует","Лимит/ошибка → ретрай, не краш","Расписание срабатывает"],
+skills:"YouTube Data API, Salesbot API, Sheets API, маппинг, квоты",mvp:"5–8 ч",robust:"16–22 ч",
+neg:"403/квота → бэкофф + лог, не пустая перезапись. Пустой ответ не затирает данные.",
+comm:"Да — сбор метрик в Sheets/BI для агентств."},
 
-{id:"TASK-18",title:"Парсер Excel-смет в унифицированный формат",src:"Kwork",link:"https://kwork.ru/projects/3260314/view",status:"real",diff:"hard",
-problem:"Нужен backend-разработчик для микросервиса, конвертирующего Excel-сметы произвольной структуры в унифицированный формат B2B SaaS-платформы (дата на бирже: 28.09.2026).",
-result:"Сервис принимает Excel-смету любой структуры и возвращает данные в едином формате (JSON/таблица), устойчиво к разным шаблонам.",
-func:["Приём .xlsx произвольной структуры","Распознавание колонок (наименование/кол-во/цена/сумма) эвристикой/ИИ","Нормализация в единую схему","Валидация сумм (кол-во×цена=сумма)","API: файл на вход → унифицированный JSON на выход"],
-test:"Загружаем смету, где цена в колонке D, у другой — в E. Обе → один формат с полями {name,qty,price,total}.",
-accept:["Сметы с разной раскладкой колонок парсятся в одну схему","Строки с ошибкой суммы помечаются, не отбрасываются молча","Пустые/служебные строки отфильтрованы","Битый/не-Excel файл → понятная ошибка, не краш"],
-skills:"Python (openpyxl/pandas), эвристики/LLM для маппинга колонок, валидация, REST API, обработка ошибок файлов",
-mvp:"8–12 ч",robust:"24–34 ч",assume:"MVP — 2–3 типовых шаблона; robust — произвольные структуры, объединённые ячейки, многолистовые сметы",
-neg:"Файл с объединёнными ячейками/шапкой на 3 строки — не ломаться, определять данные ниже шапки. Не-Excel (csv/pdf) → 400 с пояснением.",
-comm:"Да. Конвертация документов произвольной структуры в единый формат — востребовано в SaaS, учёте, тендерах."},
+/*18*/{id:"TASK-18",title:"Парсер Excel-смет в унифицированный формат",plat:"Kwork",com:"проект 3260314",link:"https://kwork.ru/projects/3260314/view",st:"A",diff:"hard",pub:"28.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Ищем Backend-разработчика (Python/Node) для разработки микросервиса, конвертирующего Excel-сметы произвольной структуры в унифицированный формат нашей B2B SaaS-платформы",
+problem:"Excel-смета любой структуры → данные в едином формате (JSON), устойчиво к шаблонам.",
+func:["Приём .xlsx произвольной структуры","Распознавание колонок (наим/кол-во/цена/сумма)","Нормализация в единую схему","Валидация сумм (кол-во×цена)","API: файл → JSON"],
+test:"Сметы с ценой в D и в E → один формат {name,qty,price,total}.",
+accept:["Разная раскладка колонок → одна схема","Ошибка суммы помечается, не отбрасывается","Пустые/служебные строки отфильтрованы","Не-Excel → понятная ошибка"],
+skills:"Python (openpyxl/pandas), эвристики/LLM маппинга, валидация, REST",mvp:"8–12 ч",robust:"24–34 ч",
+neg:"Объединённые ячейки/шапка 3 строки → данные ниже шапки. csv/pdf → 400.",
+comm:"Да — конвертация документов в единый формат для SaaS/тендеров."},
 
-{id:"TASK-19",title:"Бот в MAX для клиники с интеграцией базы пациентов",src:"Kwork",link:"https://kwork.ru/projects/3265503/view",status:"real",diff:"medium",
-problem:"Нужно разработать бота в MAX для стоматологической клиники с интеграцией с программой «Феникс», где хранится база пациентов. Аккаунт компании в MAX есть и подтверждён (дата на бирже: 09.10.2026).",
-result:"Пациент в MAX-боте записывается и получает информацию, бот связан с базой пациентов клиники.",
-func:["Бот на MAX Bot API (приём сообщений, меню)","Интеграция с базой пациентов (Феникс): поиск/запись","Запись на приём со свободными слотами","Напоминание пациенту о визите","Уведомление администратору"],
-test:"Пациент пишет боту в MAX «записаться к стоматологу» → показаны слоты → запись сохранена и видна в базе клиники.",
-accept:["Бот отвечает в MAX и ведёт диалог записи","Запись синхронизируется с базой пациентов","Слот не бронируется дважды","Недоступность базы — не теряет запрос, ставит в очередь"],
-skills:"MAX Bot API, интеграция с внешней БД/ПО (Феникс), логика слотов, напоминания, обработка ошибок",
-mvp:"8–12 ч",robust:"24–34 ч",assume:"MVP — бот в MAX + мок базы пациентов; robust — реальная интеграция с Феникс, слоты, напоминания",
-neg:"База пациентов недоступна — запрос в очередь + алерт, не отказ. Пациента нет в базе — создать нового, не падать.",
-comm:"Да, и это наш козырь. MAX-боты — first-mover ниша: клиники, салоны, услуги на MAX с интеграцией в их учётные системы."},
+/*19*/{id:"TASK-19",title:"Бот в MAX для клиники с интеграцией базы пациентов",plat:"Kwork",com:"проект 3265503",link:"https://kwork.ru/projects/3265503/view",st:"A",diff:"medium",pub:"09.10.2026",chk:"09.10.2026 (HTTP 200; заголовок «Сделать бота в MAX» подтв.)",
+ex:"Необходимо разработать бота в MAX для стоматологической клиники ДЕНТА с интеграцией с программой Феникс, где хранится база пациентов. Аккаунт компании в MAX есть и подтверждён",
+problem:"Пациент в MAX-боте записывается/получает инфо, бот связан с базой пациентов клиники.",
+func:["Бот на MAX Bot API (меню, приём сообщений)","Интеграция с базой пациентов (Феникс)","Запись со свободными слотами","Напоминание пациенту","Уведомление администратору"],
+test:"«записаться к стоматологу» в MAX → слоты → запись видна в базе клиники.",
+accept:["Бот ведёт диалог записи в MAX","Запись синхронизируется с базой","Слот не бронируется дважды","База недоступна → очередь, не отказ"],
+skills:"MAX Bot API, интеграция с внешней БД/ПО (Феникс), слоты, напоминания",mvp:"8–12 ч",robust:"24–34 ч",
+neg:"База недоступна → очередь+алерт. Пациента нет → создать нового.",
+comm:"Да — наш козырь: MAX-боты first-mover, клиники/салоны с интеграцией в учётные системы."},
 
-{id:"TASK-20",title:"ИИ-консультант обработки заявок из всех каналов в Bitrix24",src:"Kwork",link:"https://kwork.ru/projects/3260412/view",status:"real",diff:"hard",
-problem:"Под ключ: разработать и внедрить ИИ-консультанта, отвечающего на заявки клиентов. Заявки из почты, мессенджеров и сайтов стекаются в Bitrix24; несколько сценариев, перевод карточек по стадиям (дата на бирже: 28.09.2026).",
-result:"Заявки из всех каналов сходятся в Б24, ИИ отвечает по сценариям, двигает карточки и отдаёт сложное человеку.",
-func:["Сбор заявок из почты/мессенджеров/сайтов в Bitrix24","ИИ-ответ по нескольким сценариям","Перевод карточки сделки по стадиям","Эскалация сложного вопроса человеку","Единый контакт без дублей по каналам"],
-test:"Письмо и сообщение из мессенджера от одного клиента → один лид в Б24 → ИИ отвечает по сценарию → карточка на нужной стадии.",
-accept:["Заявки из разных каналов сходятся в один лид по контакту","ИИ отвечает по заданным сценариям, не выдумывает","Карточка двигается по стадиям автоматически","Сложный вопрос уходит человеку с историей"],
-skills:"Bitrix24 REST, коннекторы каналов (почта/мессенджеры/сайт), LLM по сценариям, дедуп контактов, обработка ошибок",
-mvp:"16–24 ч (2 канала + мок Б24)",robust:"60–90 ч",assume:"MVP — 2 канала + базовый сценарий; robust — все каналы, много сценариев, продовая надёжность",
-neg:"Один контакт в двух каналах — склейка в один лид, не два. Недоступность Б24 — очередь заявок, диалог продолжается.",
-comm:"Да, премиально. Флагманский пакет «ИИ-обработка заявок из всех каналов в CRM» — высокий чек и рекуррент."}
+/*20*/{id:"TASK-20",title:"ИИ-консультант заявок из всех каналов в Bitrix24",plat:"Kwork",com:"проект 3260412",link:"https://kwork.ru/projects/3260412/view",st:"A",diff:"hard",pub:"28.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Выполнить под ключ: разработать и внедрить ИИ-консультанта, отвечающего на заявки клиентов. Заявки из почты, мессенджеров, сайтов стекаются в битру. Несколько сценариев. Настройка перевода карточ…",
+problem:"Заявки из всех каналов → Б24, ИИ отвечает по сценариям, двигает карточки, отдаёт сложное человеку.",
+func:["Сбор заявок из почты/мессенджеров/сайтов в Б24","ИИ-ответ по нескольким сценариям","Перевод карточки по стадиям","Эскалация человеку","Единый контакт без дублей"],
+test:"Письмо и сообщение из мессенджера от одного клиента → один лид → ИИ по сценарию → нужная стадия.",
+accept:["Каналы сходятся в один лид по контакту","ИИ по сценариям, без выдумок","Карточка двигается автоматически","Сложное → человеку с историей"],
+skills:"Bitrix24 REST, коннекторы каналов, LLM по сценариям, дедуп контактов",mvp:"16–24 ч",robust:"60–90 ч",
+neg:"Один контакт в двух каналах → один лид. Б24 недоступен → очередь.",
+comm:"Да, премиально — «ИИ-обработка заявок из всех каналов в CRM»."},
+
+/*21*/{id:"TASK-21",title:"Telegram-бот с интеграцией в базу 1С",plat:"Kwork",com:"проект 3253484",link:"https://kwork.ru/projects/3253484/view",st:"A",diff:"hard",pub:"15.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Мы ищем опытного разработчика Python/Middle+ уровня для создания автоматизированной системы ввода первичных документов (A1) и виртуального ассистента (RICH). Опыт работы с 1С…",
+problem:"TG-бот вводит первичные документы и работает ассистентом, синхронно с базой 1С.",
+func:["TG-бот приёма документов/команд","Интеграция с 1С (чтение/запись первички)","Виртуальный ассистент по данным 1С","Валидация и подтверждение операций","Логи и обработка ошибок обмена"],
+test:"Пользователь шлёт накладную → данные распознаны → проведены в 1С → подтверждение в боте.",
+accept:["Документ попадает в 1С корректно","Ошибка обмена 1С → не теряет данные (очередь)","Ассистент отвечает по актуальным данным 1С","Нет двойного проведения"],
+skills:"Python, Telegram Bot API, 1С (OData/HTTP-сервисы), очереди, обработка ошибок",mvp:"12–18 ч",robust:"40–60 ч",
+neg:"1С недоступна → очередь+алерт. Дубль-документ → защита по номеру.",
+comm:"Да — интеграции с 1С востребованы у любого бизнеса на 1С."},
+
+/*22*/{id:"TASK-22",title:"Telegram-бот платного доступа к ChatGPT (API + оплата)",plat:"Kwork",com:"проект 3260913",link:"https://kwork.ru/projects/3260913/view",st:"A",diff:"medium",pub:"29.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Требуется разработать и настроить Telegram-бота, который будет предоставлять пользователям платный доступ к оригинальному ChatGPT (через официальный API OpenAI)",
+problem:"Бот даёт платный доступ к ChatGPT: оплата → токены/лимит → запросы к OpenAI.",
+func:["Диалог с OpenAI API в боте","Учёт лимита/токенов на пользователя","Оплата и пополнение баланса","Ограничение при нуле баланса","Логи использования"],
+test:"Оплата 500 ₽ → баланс. Запрос → ответ OpenAI + списание. Ноль → предложение пополнить.",
+accept:["Ответы идут от OpenAI","Баланс списывается корректно","Платёж идемпотентен","При нуле запрос блокируется"],
+skills:"OpenAI API, Telegram Bot API, платёжный провайдер, учёт баланса",mvp:"6–10 ч",robust:"18–26 ч",
+neg:"Ошибка OpenAI → не списывать баланс. Дубль-платёж → без двойного зачисления.",
+comm:"Да — массовый формат, рекуррентный доход."},
+
+/*23*/{id:"TASK-23",title:"RAG-микросервис по строительным нормам (Gemini API)",plat:"Kwork",com:"проект 3260329",link:"https://kwork.ru/projects/3260329/view",st:"A",diff:"hard",pub:"28.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Ищем AI / LLM-разработчика (Python) для создания RAG-микросервиса на базе Gemini API. Сервис должен индексировать строительные нормы и стандарты (КМК, СНиП, ГОСТ, IBC, Dubai Building Code и др.)",
+problem:"RAG-сервис индексирует нормативы и отвечает по ним со ссылками на источник.",
+func:["Индексация документов нормативов (чанки+эмбеддинги)","Поиск релевантного контекста","Ответ LLM (Gemini) строго по контексту со ссылкой на пункт","API для запросов","Фолбэк при отсутствии ответа"],
+test:"Вопрос по СНиП → ответ с цитатой пункта и ссылкой на документ.",
+accept:["Ответ только из проиндексированных норм","Указывается источник/пункт","Нет в базе → честный фолбэк","Обновление корпуса без правки кода"],
+skills:"Python, RAG/векторный поиск, Gemini API, чанкинг, цитирование",mvp:"12–16 ч",robust:"34–48 ч",
+neg:"Противоречие в нормах → показать оба источника, не выбирать. Длинный документ → чанкинг.",
+comm:"Да — RAG по корпусу документов (нормы, регламенты, договоры) — переиспользуемый продукт."},
+
+/*24*/{id:"TASK-24",title:"Голосовой AI-ассистент приёма звонков такси",plat:"Kwork",com:"проект 3261327",link:"https://kwork.ru/projects/3261327/view",st:"A",diff:"hard",pub:"30.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Необходимо разработать голосового AI-ассистента, который будет самостоятельно принимать входящие звонки клиентов службы такси и оформлять заказы",
+problem:"Голосовой бот принимает звонок, понимает адрес/время, оформляет заказ.",
+func:["Приём входящего звонка (SIP/телефония)","ASR речи клиента в реальном времени","Диалог: откуда/куда/время","Оформление заказа в системе","Передача оператору при сложности"],
+test:"Звонок «такси с ул. Ленина 5 на вокзал через 10 минут» → заказ создан с этими полями.",
+accept:["Адрес/время распознаются верно","Заказ создаётся в системе","Непонятое → переспрос или оператор","Нет создания пустого/битого заказа"],
+skills:"Телефония/SIP, ASR+TTS, диалоговый LLM, интеграция с системой заказов",mvp:"20–30 ч",robust:"60–100 ч",
+neg:"Шум/неразборчиво → переспрос, затем оператор. Система заказов недоступна → оператор.",
+comm:"Да — голосовые боты для такси/доставки/колл-центров, высокий чек."},
+
+/*25*/{id:"TASK-25",title:"5 парсеров Python по образцам (деплой на сервере)",plat:"Kwork",com:"проект 3258631",link:"https://kwork.ru/projects/3258631/view",st:"A",diff:"medium",pub:"24.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Нужно написать по образцам парсеры для 5 разных сайтов, деплой и настройка в моём аккаунте apify, предусмотреть возможность работы парсеров на моём сервере (вне инфраструктуры apify), хорошо закомментировать",
+problem:"5 парсеров по образцам, деплой на apify и на своём сервере, читаемый код.",
+func:["Парсер под каждый из 5 сайтов","Единый формат выгрузки","Деплой на apify + автономный запуск на сервере","Обработка ошибок/ретраи","Комментарии и инструкция"],
+test:"Запуск парсера №1 → структурированные данные сайта-образца в заданном формате.",
+accept:["Все 5 парсеров отдают данные в формате","Работает и на apify, и автономно","Сменилась разметка → понятная ошибка","Код читаем и задокументирован"],
+skills:"Python (requests/playwright), парсинг, apify, деплой, обработка ошибок",mvp:"8–12 ч",robust:"20–30 ч",
+neg:"Антибот/429 → ретрай с бэкоффом. Пустая страница → не писать мусор.",
+comm:"Да — парсинг под ключ, повторяемый поток заказов."},
+
+/*26*/{id:"TASK-26",title:"Сервис задач для исполнителей через MAX-бот",plat:"Kwork",com:"проект 3259046",link:"https://kwork.ru/projects/3259046/view",st:"A",diff:"hard",pub:"25.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"С использованием ИИ необходимо создать сервис при помощи которого: Заказчик заходит в веб-интерфейс, создает задачи (например «Собрать мебель», «Перевести текст»)… [взаимодействие через Max bot]",
+problem:"Заказчик создаёт задачи в вебе, исполнители получают/берут их через MAX-бот, ИИ помогает.",
+func:["Веб-интерфейс создания задач","MAX-бот для исполнителей (получение/взятие задач)","Матчинг задачи ↔ исполнитель","Статусы и уведомления в MAX","ИИ-помощь (классификация/формулировка)"],
+test:"Задача «Перевести текст» создана → исполнители в MAX видят и берут → статус «в работе».",
+accept:["Задача из веба доходит в MAX","Взятие задачи фиксирует исполнителя","Статусы синхронны веб↔MAX","Задача не берётся двумя сразу"],
+skills:"MAX Bot API, веб-бэкенд, матчинг, LLM, уведомления",mvp:"14–20 ч",robust:"40–60 ч",
+neg:"Двойное взятие задачи → защита по id. MAX недоступен → веб продолжает, очередь уведомлений.",
+comm:"Да — 2-й MAX-кейс, маркетплейс-механика на нашей first-mover нише."},
+
+/*27*/{id:"TASK-27",title:"WP-плагин: фид недвижимости для Яндекс/Авито/Циан",plat:"Kwork",com:"проект 3258684",link:"https://kwork.ru/projects/3258684/view",st:"A",diff:"medium",pub:"24.09.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Небольшой сайт на Wordpress, нужно создать плагин, который будет генерировать Фид (все поля по требованию/условию Яндекс недвижимость, Авито, Циан). С сайта должны экспортироваться данные",
+problem:"WP-плагин генерирует корректные XML-фиды под требования Яндекс/Авито/Циан из данных сайта.",
+func:["Сбор данных объектов из WP","Генерация XML-фида под Яндекс Недвижимость","Фиды под Авито и Циан (их схемы)","Автообновление фида по расписанию","Валидация фида по спецификации площадки"],
+test:"Объект на сайте → в фиде появляется с обязательными полями, валиден по схеме Яндекс.",
+accept:["Фид валиден по спецификации каждой площадки","Новый/изменённый объект отражается","Невалидный объект помечается, фид не ломается","Фид доступен по постоянному URL"],
+skills:"WordPress/PHP, XML по спецификациям площадок, cron, валидация",mvp:"6–10 ч",robust:"18–26 ч",
+neg:"Объект без обязательного поля → не ломать фид, пометить. Схема площадки обновилась → предупредить.",
+comm:"Да — фиды под маркетплейсы/агрегаторы, повторяемо по нишам."},
+
+/*28*/{id:"TASK-28",title:"AI-проверка домашних заданий для онлайн-школы",plat:"Kwork",com:"проект 3261789",link:"https://kwork.ru/projects/3261789/view",st:"A",diff:"hard",pub:"01.10.2026",chk:"09.10.2026 (HTTP 200)",
+ex:"Нужен AI-ассистент для автоматической проверки домашних заданий в онлайн-школе (программирование, математика, языки). В виде сервиса, который будет интегрирован в проект",
+problem:"Сервис принимает работу ученика, проверяет ИИ по критериям, выдаёт оценку и фидбек.",
+func:["Приём работы ученика (текст/код/файл)","Проверка по критериям предмета (LLM + для кода автотесты)","Оценка + развёрнутый фидбек","API для интеграции в платформу","Лог и статистика проверок"],
+test:"Код-решение → прогон тестов + LLM-ревью → оценка и комментарии по ошибкам.",
+accept:["Оценка соответствует критериям (эталон)","Фидбек конкретный, по делу","Код проверяется автотестами, не только LLM","Спорные случаи помечаются на ручную проверку"],
+skills:"LLM API, сэндбокс для кода/автотесты, API, антипромпт-инъекция",mvp:"12–16 ч",robust:"34–48 ч",
+neg:"Попытка промпт-инъекции в ответе ученика → игнор. Нестандартное решение → не занижать слепо, флаг.",
+comm:"Да — EdTech, онлайн-школы, курсы с потоком ДЗ."},
+
+/*29*/{id:"TASK-29",title:"Платёжка к TG-боту с рекуррентными подписками",plat:"FL.ru",com:"проект 5524997",link:"https://www.fl.ru/projects/5524997/podklyuchenie-platejnoy-sistemyi-dlya-telegram-bota.html",st:"A",diff:"medium",pub:"09.10.2026",chk:"09.10.2026 (WebFetch, текст открыт)",
+ex:"Подключить CloudPayments/Robokassa к TG-боту для продажи подписки на торговые сигналы, автовыдача/отзыв доступа в закрытый канал, рекуррентные списания; помощь с заявкой в платёжку и юр.документами",
+problem:"TG-бот продаёт подписку с рекуррентными списаниями, авто-выдаёт и отзывает доступ в канал.",
+func:["Приём оплаты (CloudPayments/Robokassa)","Рекуррентные (регулярные) списания","Автовыдача доступа в закрытый канал","Автоотзыв при неоплате/отмене","Уведомления о списаниях/проблемах"],
+test:"Подписка оформлена → доступ в канал. Следующий месяц: рекуррент успешен → доступ сохранён; неуспешен → отзыв.",
+accept:["Рекуррент списывается по графику","Доступ выдаётся/отзывается автоматически","Отказ рекуррента обрабатывается (ретрай/отзыв)","Вебхуки идемпотентны"],
+skills:"CloudPayments/Robokassa recurring API, Telegram Bot API (invite/ban), вебхуки, планировщик",mvp:"8–12 ч",robust:"24–34 ч",
+neg:"Рекуррент отклонён → ретрай по политике, затем отзыв. Дубль-вебхук → без двойного списания.",
+comm:"Да — рекуррентные подписки в Telegram, высокий LTV."},
+
+/*30*/{id:"TASK-30",title:"Prompt-engineering: Claude + Gemini API в приложение",plat:"FL.ru",com:"проект 5524966",link:"https://www.fl.ru/projects/5524966/promt-injener-generatsiya-tekstov-cherez-claude-i-kartinki-gemini-api-prilojenie.html",st:"A",diff:"medium",pub:"09.10.2026",chk:"09.10.2026 (WebFetch, текст открыт)",
+ex:"Нужны промпты для приложения: система+шаблон с переменными, надёжный JSON-вывод с парсингом и обработкой ошибок, текст под синтез речи (Yandex SpeechKit), генерация иллюстрации через Gemini API. Тестовое 3-4 ч, NDA",
+problem:"Промпты и обвязка: надёжный структурированный JSON-вывод LLM + генерация речи и иллюстраций.",
+func:["Системный промпт + шаблон с переменными","Гарантированный валидный JSON (схема + ретрай при невалидном)","Подготовка текста под Yandex SpeechKit","Генерация иллюстрации через Gemini API","Обработка ошибок парсинга/API"],
+test:"Запрос → валидный JSON по схеме; текст уходит в SpeechKit; картинка от Gemini получена.",
+accept:["JSON всегда валиден по схеме (ретрай при провале)","Невалидный ответ LLM не роняет приложение","Текст корректно озвучивается","Иллюстрация генерируется и сохраняется"],
+skills:"Prompt-engineering, Claude API, Gemini API, Yandex SpeechKit, JSON-схемы, обработка ошибок",mvp:"6–10 ч",robust:"18–24 ч",
+neg:"LLM вернул невалидный JSON → ретрай с жёсткой схемой, затем безопасный дефолт. API недоступен → очередь.",
+comm:"Да — надёжный LLM-вывод нужен почти в каждом AI-продукте."},
+
+/*31*/{id:"TASK-31",title:"Миграция ~1000 карточек в OpenCart 3 (парсер)",plat:"FL.ru",com:"проект 5524958",link:"https://www.fl.ru/projects/5524958/perenos-kartishek-tovarov-na-opencart-3.html",st:"B",diff:"medium",pub:"09.10.2026",chk:"09.10.2026 (WebFetch, текст открыт)",
+ex:"~1000 карточек+категории перенести с Made Simple CMS на OpenCart 3; у источника НЕТ экспорта в Excel — значит нужен парсер/скрейпинг. Поля: title, meta, описание, фото, URL, цена, 4-6 характеристик",
+problem:"Нет экспорта → парсер снимает карточки со старого сайта и импортирует в OpenCart 3.",
+func:["Парсер карточек со старого сайта","Сбор полей: title, meta, описание, фото, цена, характеристики","Импорт в OpenCart 3 (категории+товары)","Скачивание и привязка фото","Отчёт о перенесённом/ошибках"],
+test:"10 карточек-образцов → перенесены в OpenCart с полями и фото, категории сохранены.",
+accept:["Поля переносятся корректно","Фото скачаны и привязаны","Категории сохранены","Ошибочные карточки в отчёте, не теряются"],
+skills:"Python парсинг, OpenCart API/импорт, работа с изображениями",mvp:"6–10 ч",robust:"18–26 ч",
+neg:"Карточка без фото/цены → перенести с пометкой. Дубль по URL → не задваивать.",
+comm:"Да — миграция/импорт каталогов, частый e-com заказ."},
+
+/*32*/{id:"TASK-32",title:"Локальная AI-инфраструктура с агентами и n8n",plat:"freelance.ru",com:"задача 12273",link:"https://freelance.ru/task/view/12273",st:"A",diff:"hard",pub:"09.10.2026",chk:"09.10.2026 (WebFetch, текст открыт)",
+ex:"offline-first локальный/облачный AI-стек на MacBook Pro M5 Max 128GB — Ollama, LM Studio, MLX/Metal, Zed + OpenCode с AGENTS.md, секреты, локальный RAG (Obsidian/AnythingLLM), медиапайплайн (MacWhisper, yt-dlp, ffmpeg), read-only Avito MCP-коннектор; срок этапа 14 дней, далее n8n и браузер-агенты",
+problem:"Собрать offline-first локальный AI-стек с агентами, локальным RAG, MCP-коннектором и n8n-автоматизацией.",
+func:["Установка/настройка Ollama + LM Studio (MLX/Metal)","Локальный RAG по Obsidian/AnythingLLM","Агентный слой (Zed + OpenCode, AGENTS.md, секреты)","read-only Avito MCP-коннектор","Медиапайплайн (Whisper/yt-dlp/ffmpeg) + задел под n8n"],
+test:"Запрос к локальной модели по заметкам Obsidian → релевантный ответ оффлайн; MCP отдаёт данные Avito (read-only).",
+accept:["Локальная модель отвечает оффлайн","RAG находит по локальной базе","MCP-коннектор только на чтение","Секреты не в открытом виде"],
+skills:"Ollama/LM Studio, MLX, RAG, MCP, n8n, macOS, медиатулинг",mvp:"14–20 ч",robust:"40–60 ч",
+neg:"Нет сети → стек работает оффлайн. MCP на запись → запрещено конфигом.",
+comm:"Умеренно — ценно как экспертиза по локальному AI/MCP, под каждого индивидуально."},
+
+/*33*/{id:"TASK-33",title:"AI Help Desk / AI-менеджер для музлейбла (Telegram, RAG)",plat:"weblancer.net",com:"проект 1269498",link:"https://www.weblancer.net/freelance/veb-programmirovanie-31/razrabotka-ai-help-desk-ai-manager-dlya-muz-leibla-1269498/",st:"A",diff:"hard",pub:"не указана",chk:"09.10.2026 (WebFetch/curl, текст открыт)",
+ex:"Нужна разработка AI-менеджера / Help Desk для музыкального лейбла в Telegram… бот в групповых и личных чатах; отвечает на основе базы знаний (FAQ, инструкции, договоры); если не уверен — передаёт сотруднику; автораспределение обращений (юрист/финансы/дистрибуция/A&R/маркетинг); контроль времени ответа, эскалация; веб-админка со статистикой; желательно RAG/vector DB; в дальнейшем CRM, карточки артистов",
+problem:"TG-бот Help Desk с RAG, маршрутизацией по отделам, SLA-контролем и веб-админкой.",
+func:["Бот в групповых и личных чатах Telegram","Ответы по базе знаний (RAG/vector DB)","Автораспределение по отделам (юрист/финансы/дистрибуция/A&R/маркетинг)","Эскалация сотруднику при неуверенности + контроль времени ответа","Веб-админка со статистикой"],
+test:"Вопрос «когда выплаты роялти?» → ответ из базы; «спор по договору» → маршрут юристу + таймер SLA.",
+accept:["Ответы из базы, при неуверенности → человек","Обращение уходит в нужный отдел","SLA-таймер и эскалация работают","Админка показывает статистику обращений"],
+skills:"Telegram Bot API, RAG/vector DB, маршрутизация, веб-админка, LLM",mvp:"14–20 ч",robust:"45–65 ч",
+neg:"Вопрос вне базы → человеку, не выдумка. Нет свободного в отделе → эскалация выше.",
+comm:"Да — AI Help Desk с маршрутизацией под любую компанию с отделами."},
+
+/*34*/{id:"TASK-34",title:"AI-лид-машина: поиск перевозчиков (GPT + Claude)",plat:"weblancer.net",com:"проект 1269559",link:"https://www.weblancer.net/freelance/veb-programmirovanie-31/razrabotka-programmi-poiska-transportnikh-kompanii-s-gpt-i-claude-1269559/",st:"A",diff:"hard",pub:"не указана",chk:"09.10.2026 (WebFetch/curl, текст открыт)",
+ex:"Программа с ChatGPT и Claude для поиска перевозчиков… искать контакты на сайтах, в каталогах, публичных Telegram-каналах и группах… находить телефон, email, Telegram, сайт, географию перевозок… проверять актуальность, сохранять источник и дату, не придумывать данные, убирать дубли",
+problem:"Сбор контактов перевозчиков из открытых источников с проверкой, дедупликацией и фиксацией источника.",
+func:["Поиск по сайтам/каталогам/публичным TG-каналам","Извлечение контактов (телефон/email/Telegram/сайт/гео) через LLM","Проверка актуальности, сохранение источника и даты","Дедупликация записей","Выгрузка в таблицу/БД"],
+test:"Запуск по нише → список перевозчиков с контактами, у каждого источник+дата, без дублей.",
+accept:["Контакты извлекаются из разных источников","У каждой записи источник и дата","Данные не выдумываются (пусто если нет)","Дубли схлопнуты"],
+skills:"Python, LLM (GPT/Claude), парсинг, Telegram API (публичное), дедуп",mvp:"12–18 ч",robust:"34–50 ч",
+neg:"Источник недоступен → пропустить+лог, не выдумывать контакт. Сомнительный контакт → пометить «не проверен».",
+comm:"Да — лид-машина под любую B2B-нишу (поиск и обогащение контактов)."},
+
+/*35*/{id:"TASK-35",title:"Python-бот браузерной автоматизации (антидетект)",plat:"weblancer.net",com:"проект 1269468",link:"https://www.weblancer.net/freelance/veb-programmirovanie-31/bot-na-python-dlya-avtomatizatsii-deistvii-v-brauzere-1269468/",st:"A",diff:"hard",pub:"не указана",chk:"09.10.2026 (WebFetch/curl, текст открыт)",
+ex:"Требуется разработать/доработать бота на Python, который автоматизирует работу в браузере: переходы по сайтам, клики, сбор информации, логи… работать через реальный браузер (Playwright/Selenium/undetected-chromedriver)… прокси (ротация, SOCKS5/HTTP)… управлять cookies, сессиями, user-agent, fingerprint… ретраи, капча",
+problem:"Бот управляет реальным браузером: навигация, клики, сбор данных, прокси и управление сессиями.",
+func:["Автоматизация через Playwright/Selenium","Переходы, клики, извлечение данных, логи","Ротация прокси (SOCKS5/HTTP)","Управление cookies/сессиями/user-agent/fingerprint","Ретраи и обработка капчи, конфиг сценариев"],
+test:"Сценарий: открыть сайт → залогиниться по сессии → собрать таблицу → сохранить; при бане прокси — ротация и ретрай.",
+accept:["Сценарий выполняется стабильно","Прокси ротируются при блокировке","Сессии/cookies сохраняются между запусками","Ошибка шага → ретрай, затем лог, не краш"],
+skills:"Python, Playwright/Selenium, прокси, антидетект, обработка капчи",mvp:"10–16 ч",robust:"30–44 ч",
+neg:"Капча → сервис решения или пауза. Прокси забанены → ротация, затем стоп с алертом.",
+comm:"Да — браузерная RPA под сбор данных/рутину (учитывать ToS целевых сайтов)."},
 ];
 
 const RUBRIC=[
-["Функциональная корректность","Прогон успешного сценария из ТЗ: результат совпадает с ожидаемым выходом","30"],
-["Соответствие требованиям и критериям приёмки","Отметка по чек-листу «Критерии приёмки»: сколько из N пунктов выполнено","20"],
-["Обработка ошибок и граничных случаев","Прогон негативного сценария: неверные данные / недоступный API / повтор события","15"],
-["Качество архитектуры и поддерживаемость","Ревью кода: структура, именование, отсутствие дублирования, конфигурируемость","15"],
-["Безопасность и работа с данными","Нет хардкода секретов, проверка подписей вебхуков, хеширование ПДн где нужно","10"],
-["Документация и воспроизводимость запуска","Запуск по README с нуля на чистом окружении без вопросов к автору","10"]
+["Реальность и проверяемость запроса","Открыт первоисточник, статус A/B, выдержка подтверждена — 25/20/10 по полноте подтверждения","25"],
+["Практическая ценность","Решает конкретную боль, результат измерим","20"],
+["Объективность критериев приёмки","Критерии дают однозначный «готово/нет» на тест-данных","15"],
+["Переиспользуемость","Решение тиражируется на другие компании/ниши","15"],
+["Техническая содержательность","Нетривиальная логика: интеграции, идемпотентность, обработка ошибок","10"],
+["Разнообразие навыков","Задача задействует стек, не покрытый другими тестами","10"],
+["Потенциал коммерциализации","Можно оформить в повторяемую услугу/продукт","5"],
 ];
 
-const ANALYSIS=[
-["Самые полезные для проверки команды","Задачи с вебхуками и внешними API (04, 06, 07, 12, 16) — проверяют идемпотентность, обработку ошибок и безопасность, где команды чаще всего ошибаются. ИИ-задачи (01, 11, 20) проверяют работу с LLM и борьбу с галлюцинациями."],
-["Легче всего упаковать в коммерческий пакет","Заявки с сайта в CRM+Telegram (16), запись+напоминание (02), приём платежей в боте (07), подписочный бот (06), AI-администратор по базе знаний (11), MAX-бот для клиники (19). Повторяемы почти без переделки."],
-["Быстрые vs глубокие","Быстрые (3–8 ч MVP): 07, 16, 17, 12, 02. Глубокие (10+ ч): 09, 11, 15, 20 — ИИ, транскрибация, несколько интеграций, масштаб."],
-["Переиспользуемые компоненты (сделать один раз)","1) Приёмник вебхука с идемпотентностью и ретраями. 2) Коннектор оплат (bePaid/ЮKassa) с проверкой подписи. 3) Модуль «ответ ИИ по базе знаний» (RAG). 4) Планировщик напоминаний. 5) Запись в CRM/Sheets с дедупом по контакту. 6) Приёмник сообщений для TG/WA/IG в один обработчик."],
-["5 задач первыми (быстрый практический результат)","16 (заявки с сайта в CRM+TG) → 07 (оплата bePaid) → 02 (запись+напоминание) → 12 (сценарий в Make) → 11 (AI-администратор). Закрывают самые частые входные заказы и дают переиспользуемые компоненты для остального."]
+const SCOPE=[
+["Telegram-чаты","радар tools/chat_radar + tg_hunt (telethon-сессия)","~40 чатов, 81 уник. запрос в кэше","14 (взято в каталог)","полный: читаем сообщения"],
+["Kwork","радар kwork_radar, кэш 164 заказа","164 заказа","19 (A)","страницы 200; текст из скрейпа радара"],
+["FL.ru","RSS all.xml + открытие страниц","60 элементов RSS, 7 страниц открыто","3 (2 A, 1 B)","текст открыт без логина"],
+["freelance.ru","WebSearch + WebFetch","3 листинга, 2 заказа","2 (A)","открывается"],
+["weblancer.net","WebSearch + curl (WebFetch 403)","~13 страниц, 7 заказов подтв.","4 (A; 2 грей-зоны исключены)","curl 200, текст подтверждён"],
+["freelancehunt.com","WebSearch (site: работает)","4 попытки открыть","0","Cloudflare 403 — текст не подтвердить"],
+["freelancespace.ru","WebFetch/curl","5 попыток","0","TLS-блок (анти-бот), не открыть"],
+["youdo.com","WebFetch/curl","несколько попыток","0","анти-бот servicepipe, не открыть"],
+["Habr Freelance","WebFetch","root + listing + заказ","0","МЁРТВ: 410 Gone (закрыт 28.02.2025)"],
+["MAX (группы)","—","—","0","MCP недоступен — публичные группы не читаемы"],
 ];
 
-function chip(cls,txt){return `<span class="chip ${cls}">${txt}</span>`}
-const STATUS_LABEL={real:"реальный источник",partial:"частично подтверждён",synthetic:"синтетическое"};
-const DIFF_LABEL={simple:"простая",medium:"средняя",hard:"сложная"};
+const EXCL=[
+"<b>Habr Freelance</b> — сервис закрыт 28.02.2025, все URL отдают 410 Gone. Убран из пула навсегда.",
+"<b>freelancespace.ru / freelancehunt.com / youdo.com</b> — живые, но за анти-ботом (TLS-фингерпринт / Cloudflare JS-challenge / servicepipe). WebFetch и curl не проходят; нужен реальный браузер. Заказы там есть, но подтвердить текстом автоматически нельзя — в каталог не внесены.",
+"<b>MAX-группы</b> — MCP-сервер MAX в этой сессии недоступен; публичные группы прочитать не удалось. Выдуманного контента нет.",
+"<b>Исключены по этике/грей-зоне:</b> торговый бот сигналов для бинарных опционов Pocket Option (weblancer 1269746) — предаторская ниша; бот-снайпер очередей с обходом 429 чужого сайта (weblancer 1269652); массовая рассылка 300-500 сообщений/день (kwork 3261961) — спам-риск.",
+"<b>Исключён как неактуальный:</b> «Граббер сайта WAO» (FL.ru 5524965) — по профилю идеален, но исполнитель уже выбран (статус C).",
+"<b>Отсеяно как ручное/вне профиля:</b> дизайн, вёрстка Тильда без логики, копирайт, SEO/Директ, монтаж видео, заполнение карточек вручную, инженерка-стройка, бухгалтерия — не делается кодом/ИИ.",
+"<b>Не включены неподтверждённые лиды</b> из поисковых сниппетов freelancehunt (парсинг/боты) — страницы не открыты, подтвердить нельзя.",
+];
 
-function render(filter){
+const TOP5=[
+["TASK-16","Заявки с сайта в CRM+Telegram","3-5 ч, реальный заказ (A), самый частый вход. Проверяет вебхуки, идемпотентность, антиспам — основа для многих других."],
+["TASK-07","Оплата bePaid в Telegram-боте","3-5 ч, A. Переиспользуемый компонент оплат; проверяет проверку подписи вебхука и идемпотентность."],
+["TASK-02","Запись на пробное + напоминание","6-10 ч, статус B, боль явная. Проверяет планировщик, блокировки слотов, напоминания — ядро booking-продукта."],
+["TASK-11","AI-администратор по базе знаний","10-14 ч, A. Проверяет RAG и защиту от галлюцинаций — ключевой навык под поток AI-заказов."],
+["TASK-19","MAX-бот с интеграцией базы","8-12 ч, A, наша first-mover ниша MAX. Проверяет MAX Bot API и интеграцию с внешней учётной системой."],
+];
+
+const SL={A:"A — заказ",B:"B — хочет реализовать",C:"C — техзапрос"};
+const DL={simple:"простая",medium:"средняя",hard:"сложная"};
+const chip=(c,t)=>`<span class="chip ${c}">${t}</span>`;
+
+function render(f){
   const box=document.getElementById('tasks');
-  const list=TASKS.filter(t=>{
-    if(filter==='all')return true;
-    if(filter==='real')return t.status==='real';
-    if(filter==='first5')return ['TASK-16','TASK-07','TASK-02','TASK-12','TASK-11'].includes(t.id);
-    return t.diff===filter;
+  const top5ids=TOP5.map(x=>x[0]);
+  const list=T.filter(t=>{
+    if(f==='all')return true;
+    if(['A','B','C'].includes(f))return t.st===f;
+    if(f==='top5')return top5ids.includes(t.id);
+    return t.plat===f;
   });
   box.innerHTML=list.map(t=>`
     <div class="card">
       <div class="card-head">
-        <div style="flex:1 1 60%;min-width:0">
-          <div class="tid">${t.id}</div>
-          <div class="ctitle">${t.title}</div>
-        </div>
-        <div class="chips">${chip(t.status,STATUS_LABEL[t.status])}${chip(t.diff,DIFF_LABEL[t.diff])}</div>
+        <div style="flex:1 1 55%;min-width:0"><div class="tid">${t.id}</div><div class="ctitle">${t.title}</div></div>
+        <div class="chips">${chip(t.st,SL[t.st])}${chip(t.diff,DL[t.diff])}${chip('plat',t.plat)}</div>
       </div>
-      <div class="src">Источник: ${t.src} · <a href="${t.link}" target="_blank" rel="noopener">${t.link}</a></div>
-      <div class="block"><h4>Исходная проблема</h4><p>${t.problem}</p></div>
-      <div class="block"><h4>Требуемый результат</h4><p>${t.result}</p></div>
+      <div class="src">${t.plat} · ${t.com} · <a href="${t.link}" target="_blank" rel="noopener">${t.link}</a></div>
+      <div class="dates">опубликовано: ${t.pub} · проверено: ${t.chk}</div>
+      <div class="quote"><span class="lbl">Оригинал (выдержка из первоисточника)</span>«${t.ex}»</div>
+      <div class="block"><h4>Что хочет заказчик</h4><p>${t.problem}</p></div>
       <div class="grid2">
-        <div class="block"><h4>Функциональные требования</h4><ul>${t.func.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+        <div class="block"><h4>Функциональные требования (наши, под тест)</h4><ul>${t.func.map(x=>`<li>${x}</li>`).join('')}</ul></div>
         <div class="block"><h4>Критерии приёмки</h4><ul>${t.accept.map(x=>`<li>${x}</li>`).join('')}</ul></div>
       </div>
-      <div class="block"><h4>Тестовые данные</h4><div class="testdata">${t.test}</div></div>
+      <div class="block"><h4>Тестовые данные / позитивный сценарий</h4><div class="testdata">${t.test}</div></div>
       <div class="block neg"><h4>Негативный сценарий</h4><p>${t.neg}</p></div>
       <div class="grid2">
-        <div class="block"><h4>Технические навыки</h4><p>${t.skills}</p></div>
-        <div class="block"><h4>Оценка времени</h4><p>MVP: <b>${t.mvp}</b> · надёжно: <b>${t.robust}</b><br><span style="color:var(--muted)">${t.assume}</span></p></div>
+        <div class="block"><h4>Навыки</h4><p>${t.skills}</p></div>
+        <div class="block"><h4>Оценка (наша аналитика)</h4><p>MVP: <b>${t.mvp}</b> · надёжно: <b>${t.robust}</b></p></div>
       </div>
       <div class="block"><h4>Коммерциализация</h4><p>${t.comm}</p></div>
     </div>`).join('');
 }
 
+// counts
+const byStatus=s=>T.filter(t=>t.st===s).length;
+const plats=[...new Set(T.map(t=>t.plat))];
+document.getElementById('counts').innerHTML=
+  `<span class="pill">всего <b>${T.length}</b></span>`+
+  `<span class="pill">A+B подтв. <b>${byStatus('A')+byStatus('B')}</b></span>`+
+  `<span class="pill">A <b>${byStatus('A')}</b></span>`+
+  `<span class="pill">B <b>${byStatus('B')}</b></span>`+
+  `<span class="pill">C <b>${byStatus('C')}</b></span>`+
+  plats.map(p=>`<span class="pill">${p} <b>${T.filter(t=>t.plat===p).length}</b></span>`).join('');
+
+document.getElementById('scope').innerHTML=SCOPE.map(r=>`<tr><td><b>${r[0]}</b></td><td style="color:var(--muted)">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('');
+document.getElementById('scopeNote').textContent='Учтены только реально открытые объекты. «Просмотрено» = элементы RSS/страницы/сообщения, не число поисковых запросов. Поисковых запросов суб-агентами выполнено ~27, страниц открыто ~45, заказов подтверждено (A/B) — 32.';
 document.getElementById('rubric').innerHTML=RUBRIC.map(r=>`<tr><td>${r[0]}</td><td style="color:var(--muted)">${r[1]}</td><td>${r[2]}</td></tr>`).join('');
-document.getElementById('analysis').innerHTML=ANALYSIS.map((a,i)=>`<div class="block"><h4>${i+1}. ${a[0]}</h4><p>${a[1]}</p></div>`).join('');
+document.getElementById('excl').innerHTML=EXCL.map(x=>`<li>${x}</li>`).join('');
+document.getElementById('top5box').innerHTML=TOP5.map((x,i)=>`<div class="block"><h4>${i+1}. ${x[0]} — ${x[1]}</h4><p>${x[2]}</p></div>`).join('');
+document.getElementById('foot').innerHTML='Сформировано 09.10.2026. Каждая задача A/B открыта по первоисточнику и подтверждена (TG — live-embed/скрейп радара, Kwork — скрейп радара + HTTP 200, FL.ru/freelance.ru/weblancer — WebFetch/curl с чтением текста). Даты, цитаты и ссылки не выдуманы; где текст подтвердить не удалось — площадка честно вынесена в ограничения. Оценки сложности/времени/коммерции — аналитика Retensy, не факты из первоисточника.';
 
-// tracker with localStorage
-const TKEY='retensy_tracker_v1';
-function trackerRow(d){d=d||{};
-  const c=k=>`<td contenteditable="true" data-k="${k}">${d[k]||''}</td>`;
-  return `<tr>${c('id')}${c('who')}${c('time')}${c('res')}${c('err')}${c('score')}${c('fail')}${c('reuse')}</tr>`;
-}
-function loadTracker(){
-  let rows=[];
-  try{const s=localStorage.getItem(TKEY);if(s)rows=JSON.parse(s)}catch(e){}
-  if(!rows.length)rows=[{id:'TASK-16'},{id:'TASK-07'},{id:'TASK-02'},{}];
-  document.getElementById('tracker').innerHTML=rows.map(trackerRow).join('');
-}
-function saveTracker(){
-  const rows=[...document.querySelectorAll('#tracker tr')].map(tr=>{
-    const o={};tr.querySelectorAll('td').forEach(td=>o[td.dataset.k]=td.textContent.trim());return o;
-  });
-  try{localStorage.setItem(TKEY,JSON.stringify(rows))}catch(e){}
-}
+// tracker
+const TKEY='retensy_tracker_v2';
+const trackerRow=d=>{d=d||{};const c=k=>`<td contenteditable="true" data-k="${k}">${d[k]||''}</td>`;return `<tr>${c('id')}${c('who')}${c('time')}${c('res')}${c('err')}${c('score')}${c('fail')}${c('reuse')}</tr>`};
+function loadTracker(){let rows=[];try{const s=localStorage.getItem(TKEY);if(s)rows=JSON.parse(s)}catch(e){}if(!rows.length)rows=[{id:'TASK-16'},{id:'TASK-07'},{id:'TASK-02'},{}];document.getElementById('tracker').innerHTML=rows.map(trackerRow).join('')}
+function saveTracker(){const rows=[...document.querySelectorAll('#tracker tr')].map(tr=>{const o={};tr.querySelectorAll('td').forEach(td=>o[td.dataset.k]=td.textContent.trim());return o});try{localStorage.setItem(TKEY,JSON.stringify(rows))}catch(e){}}
 document.getElementById('tracker').addEventListener('input',saveTracker);
-document.getElementById('addRow').addEventListener('click',()=>{
-  document.getElementById('tracker').insertAdjacentHTML('beforeend',trackerRow({}));saveTracker();
-});
+document.getElementById('addRow').addEventListener('click',()=>{document.getElementById('tracker').insertAdjacentHTML('beforeend',trackerRow({}));saveTracker()});
 
-// filters
-document.getElementById('filters').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;
-  [...document.querySelectorAll('#filters button')].forEach(x=>x.setAttribute('aria-pressed',x===b));
-  render(b.dataset.f);
-});
+document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;[...document.querySelectorAll('#filters button')].forEach(x=>x.setAttribute('aria-pressed',x===b));render(b.dataset.f)});
 
-// theme toggle
 const tb=document.getElementById('themeBtn');
-tb.addEventListener('click',()=>{
-  const cur=document.documentElement.getAttribute('data-theme');
-  const next=cur==='dark'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',next);
-  try{localStorage.setItem('retensy_theme',next)}catch(e){}
-});
+tb.addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');const next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);try{localStorage.setItem('retensy_theme',next)}catch(e){}});
 try{const t=localStorage.getItem('retensy_theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}
 
-render('all');
-loadTracker();
+render('all');loadTracker();
 </script>
 </body>
 </html>
